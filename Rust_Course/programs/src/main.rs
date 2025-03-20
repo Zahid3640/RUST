@@ -65,7 +65,10 @@
 //mod cmd_argument;
 //mod hashmap;
 //mod  fetch_hashmap_value;
-mod regex;
+//mod regex;
+mod write_file;
+mod read_file;
+
 fn main() {
    // first_program::run();
    //integer::run();
@@ -133,5 +136,7 @@ fn main() {
    //cmd_argument::run();
    //hashmap::run();
    //fetch_hashmap_value::run();
-   regex::run();
+   //regex::run();
+   //write_file::run();
+   read_file::run();
 }
