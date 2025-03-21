@@ -1,0 +1,111 @@
+body {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1a0102, #1f0802); /* Gradient background */
+    padding: 20px;
+    min-height: 100vh;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #fff;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Input field styling */
+input {
+    width: 450px;
+    height: 40px;
+    font-size: 1.25rem;
+    padding: 8px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #ff5733;
+    box-shadow: 0 0 5px rgba(255, 87, 51, 0.5);
+}
+
+/* Button styling */
+button {
+    font-size: 1.2rem;
+    padding: 10px 16px;
+    background-color: #ff5733;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-left: 20px; 
+}
+
+button:hover {
+    background-color: #c70039;
+    transform: scale(1.05);
+}
+
+/* Todo item container */
+.todo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 900px;
+    padding: 12px 18px;
+    background: gainsboro;
+    border-radius: 10px;
+    box-shadow: 2px 4px 15px rgba(0, 14, 7, 0.2);
+    margin-top: 12px;
+    transition: 0.3s;
+}
+
+.todo:hover {
+    transform: translateY(-2px);
+    box-shadow: 2px 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Text alignment inside todo item */
+.todo p {
+    font-size: 1.2rem;
+    color: #333;
+    flex-grow: 1;
+    height: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-right: 10px;
+    align-items: center;
+}
+p{
+    height: 40px;
+}
+
+/* Buttons container */
+.todo .buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* Delete and Edit button styling */
+button.delete {
+    background-color: #e74c3c;
+    min-width: 80px;
+}
+
+button.delete:hover {
+    background-color: #c0392b;
+}
+
+button.edit {
+    background-color: #3498db;
+    min-width: 80px;
+}
+
+button.edit:hover {
+    background-color: #2980b9;
+}
