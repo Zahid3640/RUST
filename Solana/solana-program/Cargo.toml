@@ -1,0 +1,10 @@
+[package]
+name = "solana-program"
+version = "0.1.0"
+edition = "2021"  # Change to 2021 edition for stability
+
+[dependencies]
+solana-program = "2.2.1"
+
+[lib]
+crate-type = ["cdylib", "lib"]
