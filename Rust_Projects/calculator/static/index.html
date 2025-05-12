@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4; /* Light background for body */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .calculator-container {
+      background-color: #1e1e1e; /* Black calculator */
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      width: 330px;
+      border: 2px solid #444;
+    }
+
+    .result-display {
+      background-color: #000;
+      color: #ffffff;
+      padding: 15px;
+      font-size: 28px;
+      text-align: center;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      border: 2px solid #555;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .buttons button {
+      padding: 18px;
+      font-size: 20px;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .buttons button:hover {
+      background-color: #555;
+    }
+
+    .buttons button.equal {
+      grid-column: span 4;
+      background-color: #444;
+    }
+
+    .buttons button.equal:hover {
+      background-color: #666;
+    }
+
+    @media (max-width: 400px) {
+      .calculator-container {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="calculator-container">
+    <div class="result-display" id="result-display">0</div>
+    <div class="buttons">
+      <button onclick="appendValue('7')">7</button>
+      <button onclick="appendValue('8')">8</button>
+      <button onclick="appendValue('9')">9</button>
+      <button onclick="appendValue('/')">/</button>
+      
+      <button onclick="appendValue('4')">4</button>
+      <button onclick="appendValue('5')">5</button>
+      <button onclick="appendValue('6')">6</button>
+      <button onclick="appendValue('*')">*</button>
+      
+      <button onclick="appendValue('1')">1</button>
+      <button onclick="appendValue('2')">2</button>
+      <button onclick="appendValue('3')">3</button>
+      <button onclick="appendValue('-')">-</button>
+      
+      <button onclick="appendValue('0')">0</button>
+      <button onclick="appendValue('.')">.</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="appendValue('+')">+</button>
+      
+      <button class="equal" onclick="calculate()">=</button>
+    </div>
+  </div>
+
+  <script>
+    let expression = '';
+
+    function appendValue(val) {
+      if (expression === '0') expression = '';
+      expression += val;
+      document.getElementById('result-display').textContent = expression;
+    }
+
+    function clearDisplay() {
+      expression = '';
+      document.getElementById('result-display').textContent = '0';
+    }
+
+    function calculate() {
+      try {
+        const result = eval(expression);
+        document.getElementById('result-display').textContent = result;
+        expression = result.toString();
+      } catch {
+        document.getElementById('result-display').textContent = 'Error';
+        expression = '';
+      }
+    }
+  </script>
+
+</body>
+</html>
