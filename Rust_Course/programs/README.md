@@ -88,12 +88,12 @@ fn main() {
 # 🔍 Summary Table:
 <pre><br>
 # Feature           	let	                    const                           	static
-Scope	Local        (block/function)        	Global or local	                Global only
+Scope	Local        (block/function)        	Global or local	                    Global only
 Mutability        	✅ (with mut)	           ❌ Never                       	✅ (but needs unsafe)
 Type Required?	    ❌ Optional            	✅ Yes	                          ✅ Yes
 Lifetime	          Short (block)	          Forever (compiled-in)	          'static (whole app)
 Compile-time?	     ❌ Runtime	             ✅ Compile-time	                 ✅ Compile-time
-Use Case	           Temporary data	         Constants (math, config)        	Global state/memory
+Use Case	        Temporary data	         Constants (math, config)        	Global state/memory
   <br></pre>
 
 # Rust Data Types 
