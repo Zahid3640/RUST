@@ -5,15 +5,6 @@ Isay Mozilla ne develop kia tha (2010 ke around), aur iska main focus hai:
 Speed
 Concurrency.<br></pre>
 
-## Why use Rust?
-<pre><br> 
-Fast: Just like C++ – no runtime overhead.
-
-Memory Safe: No segmentation faults or null pointer issues.
-
-No Garbage Collector: It uses ownership system instead.
-
-Perfect for APIs, games, embedded systems, blockchain, etc.<br></pre>
 
 # Rust ke 3 Major Features:
 ## 1. Memory Safety (without Garbage Collector)
