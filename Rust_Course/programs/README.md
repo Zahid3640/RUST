@@ -48,7 +48,6 @@ println!("y = {}", y); // prints: y = 20</br></pre>
 
 
 ## 1. let → Runtime Variable (Default: Immutable)
-### Use:
 Temporary values ke liye jo mostly function ke andar hoti hain.
 
 <pre><br>fn main() {
@@ -60,7 +59,6 @@ Temporary values ke liye jo mostly function ke andar hoti hain.
 }<br></pre>
 
 ## 2. const → Compile-Time Constant
-### Use:
 Jiski value kabhi bhi change nahi hoti, aur wo compile-time pe fixed hoti hai.
 
 <pre><br>const PI: f64 = 3.1415;
@@ -70,7 +68,6 @@ fn main() {
     println!("Pi is: {}", PI);
 }<br></pre>
 ## 3. static → Single Memory Location (Fixed & Global)
-### Use:
 Aisi value jo program ke lifetime tak ek hi memory location mein stored rahe — global state jaisa behave karti hai.
 <pre><br>static SITE_NAME: &str = "SaduZai Wanda";
 
@@ -91,11 +88,11 @@ fn main() {
 # 🔍 Summary Table:
 <pre><br>
 # Feature           	let	                    const                           	static
-Scope	Local        (block/function)       	Global or local	                   Global only
+Scope	Local        (block/function)        	Global or local	                Global only
 Mutability        	✅ (with mut)	           ❌ Never                       	✅ (but needs unsafe)
-Type Required?	    ❌ Optional           	✅ Yes	                          ✅ Yes
-Lifetime	           Short (block)	         Forever (compiled-in)	          'static (whole app)
-Compile-time?	       ❌ Runtime	             ✅ Compile-time	                ✅ Compile-time
+Type Required?	    ❌ Optional            	✅ Yes	                          ✅ Yes
+Lifetime	          Short (block)	          Forever (compiled-in)	          'static (whole app)
+Compile-time?	     ❌ Runtime	             ✅ Compile-time	                 ✅ Compile-time
 Use Case	           Temporary data	         Constants (math, config)        	Global state/memory
   <br></pre>
 
