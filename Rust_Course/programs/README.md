@@ -35,6 +35,7 @@ println!("Age: {}", info.0); // Access by index
 ## Array
 Same type ke multiple values, fixed size.
 let marks: [i32; 3] = [80, 85, 90];
+[Array Code](https://github.com/Zahid3640/RUST/blob/main/Rust_Course/programs/src/array.rs)
 
 println!("First Mark: {}", marks[0]);
 📌 Agar tumhe dynamic size chahiye to Vec<T> use karte hain.
