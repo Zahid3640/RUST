@@ -6,10 +6,10 @@ Yeh wo types hain jo ek hi value ko hold karti hain — jaise number, character,
 
 ##  Integer Types (numbers without decimal)
 Type	Size	Range
-i8	1 B	-128 to 127
+<pre><br>i8	1 B	-128 to 127
 i32	4 B	-2,147,483,648 to 2.1B
 u32	4 B	0 to 4,294,967,295
-isize	depends on system (32 or 64 bit)	
+isize	depends on system (32 or 64 bit)	<br></pre>
 
 📌 i = signed integer (negative bhi), u = unsigned (only positive)
 let age: i32 = 24;
