@@ -389,12 +389,89 @@ Iske baad s1 ko access karne ki koshish karte hain to error aata hai, kyunke own
 
 # 2. Ownership Rules:
 <pre><br>
-Rust mein ownership ke 3 basic rules hote hain:
+1. Each value in Rust has a variable that's its owner.
+2 .A value can only have one owner at a time.
+3. When the owner goes out of scope, the value will be dropped.<br></pre>
+## 🔹 Rule 1: Each value in Rust has a single owner.
+<pre><br> fn main() {
+    let s = String::from("Zahid");
+}
+s is the owner of "Zahid" string.<br></pre>
 
-Each value in Rust has a variable that's its owner.
-A value can only have one owner at a time.
-When the owner goes out of scope, the value will be dropped.<br></pre>
+Jab s scope ke bahar jayega, memory automatically free ho jayegi.
+(No need for free() or delete)
 
+## 🔹 Rule 2: When the owner goes out of scope, the value is dropped.
+<pre><br>
+fn main() {
+    let name = String::from("Rust");
+    println!("Name is: {}", name);
+} // yahan name drop ho jata hai — memory free<br></pre>
+Rust automatically drop() call karta hai.
+
+### 🔹 Rule 3: When a value is assigned to another variable, ownership is moved, not copied (for heap data).
+<pre><br>
+fn main() {
+    let s1 = String::from("Hello");
+    let s2 = s1;
+
+    // println!("{}", s1); ❌ Error — ownership moved
+    println!("{}", s2); ✅
+}<br></pre>
+❓ Why Error?
+String heap pe store hota hai, jab s1 ko s2 diya to ownership move ho gayi.
+
+s1 → ❌ Invalid ho gaya
+
+✅ Only one variable can own the data at a time!
+
+## 🧊 But What If I Want to Keep s1 and s2?
+# Use clone():
+ <pre><br>
+fn main() {
+    let s1 = String::from("Hello");
+    let s2 = s1.clone();
+
+    println!("s1 = {}, s2 = {}", s1, s2);
+}<br></pre>
+🧠 clone() makes a deep copy. But it's expensive compared to move.
+
+## 🔹 Stack vs Heap: Why Ownership Matters?
+  <pre><br>
+Feature	                 Stack                       	Heap
+Fast	                     ✅                         	❌
+Fixed size               	✅	                         ❌
+Ownership	Not important  	✅                 Rust tracks ownership<br></pre>
+Example	Integers (i32, bool)	String, Vec etc.
+
+## 🔹 Ownership with Functions
+<pre><br>
+fn main() {
+    let s = String::from("Zahid");
+    takes_ownership(s);
+    // println!("{}", s); ❌ Error
+}
+
+fn takes_ownership(name: String) {
+    println!("Hello, {}", name);
+}<br></pre>
+🧠 Value passed into function → ownership bhi pass ho gaya!
+## 🔹 Return Ownership
+ <pre><br>
+fn main() {
+    let s1 = gives_ownership();
+    let s2 = takes_and_gives_back(s1);
+    println!("Final owner: {}", s2);
+}
+
+fn gives_ownership() -> String {
+    String::from("Rust")
+}
+
+fn takes_and_gives_back(s: String) -> String {
+    s
+}<br></pre>
+Data function mein gaya, wahan kaam hua, fir return karke ownership wapas mila.
 # 3. Borrowing – References:
 Agar tum chahte ho ke kisi variable ka access without ownership transfer ke ho, to tum borrowing ka use karte ho. Borrowing do types ka ho sakta hai:
 
