@@ -1,4 +1,5 @@
-# What is Rust 
+# *What is Rust* 
+*************************************************************
 Rust ek modern, fast, aur secure system-level  programming language hai(like C/C++), but it gives memory safety without using a garbage collector.
 Isay Mozilla ne develop kia tha (2010 ke around), aur iska main focus hai:
 <pre><br>Safety
@@ -96,7 +97,8 @@ Compile-time?	     ❌ Runtime	             ✅ Compile-time	                 �
 Use Case	        Temporary data	         Constants (math, config)        	Global state/memory
   <br></pre>
 
-# Rust Data Types 
+# *Rust Data Types* 
+*************************************************************
 ## 1. Scalar Types – Single value types
 ## 2. Compound Types – Multiple values combined
 # 1. Scalar Types
@@ -147,7 +149,8 @@ list.push(4);<br></pre>
 Rust smart hai — agar tum type nahi bhi do, to woh guess kar leta hai:
 <pre><br>let name = "Zahid"; // Rust assumes &str
 let num = 50;       // Rust assumes i32<br></pre>
-#  Functions and Scope in Rust 
+#  *Functions and Scope in Rust*
+*************************************************************
 ## 1. What is a Function?
 Rust mein function ek block of code hota hai jo specific kaam karta hai. Isse reuse, structure aur clarity milti hai.
 ### Syntax:
@@ -233,8 +236,8 @@ fn print_number() {
     let y = 20;
     println!("Inside print_number: {}", y);
 }<br></pre>
-# **Control Flow**
-********************************************************************************
+# *Control Flow*
+*************************************************************
 Control Flow ka matlab hai:
 
 ## "Program ka flow kaise control hota hai — kis block mein jana hai, kya execute karna hai."
