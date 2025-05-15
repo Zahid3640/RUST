@@ -217,7 +217,7 @@ Rust mein block {} ke andar jo variable declare hota hai, wo usi block tak limit
     // println!("{}", age); ❌ Error: `age` is out of scope
     println!("Outside block: {}", name);
 }<br></pre>
-✅ Output:
+### Output:
 <pre><br>Inside block: Zahid, 25
 Outside block: Zahid<br></pre>
 🔍 age block ke andar define hua, isliye block ke bahar use nahi ho sakta.
@@ -233,3 +233,137 @@ fn print_number() {
     let y = 20;
     println!("Inside print_number: {}", y);
 }<br></pre>
+# **Control Flow**
+********************************************************************************
+Control Flow ka matlab hai:
+
+## "Program ka flow kaise control hota hai — kis block mein jana hai, kya execute karna hai."
+
+Rust mein control flow ke main 5 tools hain:
+<pre><br>
+if / else
+match
+loop
+while
+for<br></pre>
+
+## 1. if / else Statement
+Rust mein if bilkul simple aur type-safe hota hai — condition true/false return karni chahiye.
+
+<pre><br>
+fn main() {
+    let number = 10;
+
+    if number > 0 {
+        println!("Positive number");
+    } else if number < 0 {
+        println!("Negative number");
+    } else {
+        println!("Zero");
+    }
+}<br></pre>
+### Output:
+
+<pre><br>
+Positive number<br></pre>
+🔍 Note:
+Parentheses () optional hain (if (number > 0) ❌ not needed)
+
+Curly braces {} required hain.
+
+## 2. if is an Expression (Return Value)
+Rust mein if ek expression bhi hai — iska matlab ye value return kar sakta hai:
+
+<pre><br>
+fn main() {
+    let condition = true;
+    let number = if condition { 5 } else { 10 };
+    println!("Value: {}", number);
+}<br></pre>
+### Output:
+<pre><br>
+Value: 5<br></pre>
+## 3. match Statement (Powerful Switch Case)
+match Rust ka most powerful pattern matching tool hai — JavaScript/Java/C++ ke switch ka upgrade.
+
+<pre><br>
+fn main() {
+    let number = 2;
+
+    match number {
+        1 => println!("One"),
+        2 => println!("Two"),
+        3 => println!("Three"),
+        _ => println!("Other number"), // default
+    }
+}<br></pre>
+###  Output:
+
+<pre><br>
+Two<br></pre>
+🔍 Breakdown:
+Har => ke baad ek action ya value hoti hai.
+
+_ wildcard hai (like default).
+
+## 4. loop (Infinite Loop)
+<pre><br>
+fn main() {
+    let mut count = 0;
+
+    loop {
+        println!("Count: {}", count);
+        count += 1;
+
+        if count == 3 {
+            break; // exit loop
+        }
+    }
+}<br></pre>
+### Output:
+
+<pre><br>
+Count: 0
+Count: 1
+Count: 2<br></pre>
+## 5. while Loop
+<pre><br>
+fn main() {
+    let mut number = 3;
+
+    while number != 0 {
+        println!("{}!", number);
+        number -= 1;
+    }
+
+    println!("Liftoff!");
+}<br></pre>
+###  Output:
+
+<pre><br>
+3!
+2!
+1!
+Liftoff!<br></pre>
+##  6. for Loop (Iteration)
+Rust ka for loop safest and most used loop hai:
+
+<pre><br>
+fn main() {
+    for i in 1..=5 {
+        println!("i = {}", i);
+    }
+}<br></pre>
+### Output:
+
+<pre><br>
+i = 1
+i = 2
+i = 3
+i = 4
+i = 5<br></pre>
+🔍 Note:
+1..=5 → includes 5
+
+1..5 → excludes 5
+
