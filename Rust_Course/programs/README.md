@@ -546,4 +546,88 @@ Borrowing ke case mein s1 ka ownership transfer nahi hota, aur tum main function
 
 ## 6. The Rule of Lifetime in Borrowing:
 Rust mein ek aur important cheez hai lifetimes. Lifetime ensures karte hain ke references valid rahein aur kisi bhi invalid memory access se bachaye.
+ # 🔶🔶🔶🔶 *Lifetimes in Rust *
+ *******************************************************
+## 🔰 Motivation — Lifetimes ki Zarurat Kyun?
+Rust mein hum references (&T, &mut T) use karte hain taake data ka ownership lose na ho.
+Lekin agar reference kisi invalid data ki taraf point kare, to dangling pointer error hoti hai.
+Rust ye error run-time par nahi, compile-time par pakadta hai — using lifetimes.
+
+## 📌 Lifetime = Reference ka “Zinda Rehne Ka Time”
+Lifetime ka matlab hota hai:
+## "Yeh reference kab tak valid rahega?"
+
+Rust compiler har reference ke peeche secretly lifetime attach karta hai.
+
+## 🔥 Example Without Lifetimes — Compilation Error
+<pre><br>fn get_ref() -> &String {
+    let s = String::from("Zahid");
+    &s // ❌ ERROR — s yahan destroy ho jaata hai
+}<br></pre>
+Yahan s function ke end pe destroy ho jata hai, lekin hum uska reference return kar rahe hain — invalid/dangling reference.
+
+Rust allow nahi karega.
+
+##  Fix with Lifetime Annotation
+ <pre><br>
+fn get_ref<'a>(input: &'a String) -> &'a String {
+    input // return same reference that we received
+}<br></pre>
+🔍 Breakdown:
+'a is a lifetime parameter (just like generics).
+
+Hum compiler ko keh rahe hain:
+
+“Input aur output dono references ek hi lifetime ke hain.”
+
+# 🎯 Rule of Thumb:
+## "Jis data ka reference return kar rahe ho, uska lifetime bhi pass karo."
+
+## 📦 Example:
+<pre><br>
+fn main() {
+    let name = String::from("Zahid");
+    let result = longest(&name, &String::from("Nawaz"));
+    println!("Longest: {}", result);
+}
+
+fn longest<'a>(a: &'a String, b: &'a String) -> &'a String {
+    if a.len() > b.len() {
+        a
+    } else {
+        b
+    }
+}<br></pre>
+# 🔍 Explanation:
+Dono inputs ka lifetime 'a hai.
+
+Output ka lifetime bhi 'a hai.
+
+So, return kiya gaya reference guaranteed hai ke valid rahega.
+
+## ❗ Lifetime Mismatch Error
+<pre><br>
+fn main() {
+    let r;
+    {
+        let x = 5;
+        r = &x; // ❌ Error: x doesn't live long enough
+    }
+    println!("r: {}", r);
+}<br></pre>
+Yahan x block ke baad destroy ho jata hai, lekin r uska reference rakh raha hai — invalid!
+
+# Lifetime in Structs
+Agar aap struct mein reference rakhte ho, to lifetime specify karna zaroori hai:
+
+<pre><br>
+struct Person<'a> {
+    name: &'a str,
+}
+
+fn main() {
+    let name = String::from("Zahid");
+    let p = Person { name: &name };
+    println!("{}", p.name);
+}<br></pre>
 
