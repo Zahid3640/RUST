@@ -1,4 +1,4 @@
-# *What is Rust* 
+# 🔶🔶🔶🔶 *What is Rust* 
 *************************************************************
 Rust ek modern, fast, aur secure system-level  programming language hai(like C/C++), but it gives memory safety without using a garbage collector.
 Isay Mozilla ne develop kia tha (2010 ke around), aur iska main focus hai:
@@ -97,7 +97,7 @@ Compile-time?	     ❌ Runtime	             ✅ Compile-time	                 �
 Use Case	        Temporary data	         Constants (math, config)        	Global state/memory
   <br></pre>
 
-# *Rust Data Types* 
+# 🔶🔶🔶🔶 *Rust Data Types* 
 *************************************************************
 ## 1. Scalar Types – Single value types
 ## 2. Compound Types – Multiple values combined
@@ -149,7 +149,7 @@ list.push(4);<br></pre>
 Rust smart hai — agar tum type nahi bhi do, to woh guess kar leta hai:
 <pre><br>let name = "Zahid"; // Rust assumes &str
 let num = 50;       // Rust assumes i32<br></pre>
-#  *Functions and Scope in Rust*
+#  🔶🔶🔶🔶 *Functions and Scope in Rust*
 *************************************************************
 ## 1. What is a Function?
 Rust mein function ek block of code hota hai jo specific kaam karta hai. Isse reuse, structure aur clarity milti hai.
@@ -236,7 +236,7 @@ fn print_number() {
     let y = 20;
     println!("Inside print_number: {}", y);
 }<br></pre>
-# *Control Flow*
+# 🔶🔶🔶🔶 *Control Flow*
 *************************************************************
 Control Flow ka matlab hai:
 
@@ -369,4 +369,104 @@ i = 5<br></pre>
 1..=5 → includes 5
 
 1..5 → excludes 5
+# 🔶🔶🔶🔶 1. *Ownership*
+****************************************************************
+Rust mein har value ka owner hota hai. Har variable ko ek time par ek hi owner hota hai, aur jab owner destroy hota hai, to value bhi drop ho jaati hai (memory free ho jaati hai).
+
+### Example:
+<pre><br>
+fn main() {
+    let s1 = String::from("Hello");
+    let s2 = s1; // Ownership of 's1' moves to 's2'
+
+    // println!("{}", s1); // Error! 's1' no longer owns the value
+    println!("{}", s2);  // Works fine
+}<br></pre>
+### Explanation:
+s1 ne string "Hello" ko own kiya, phir s1 ki ownership s2 ko transfer ho gayi.
+
+Iske baad s1 ko access karne ki koshish karte hain to error aata hai, kyunke ownership transfer ho chuki hai.
+
+# 2. Ownership Rules:
+<pre><br>
+Rust mein ownership ke 3 basic rules hote hain:
+
+Each value in Rust has a variable that's its owner.
+A value can only have one owner at a time.
+When the owner goes out of scope, the value will be dropped.<br></pre>
+
+# 3. Borrowing – References:
+Agar tum chahte ho ke kisi variable ka access without ownership transfer ke ho, to tum borrowing ka use karte ho. Borrowing do types ka ho sakta hai:
+
+Immutable Borrowing (multiple references allowed)
+
+Mutable Borrowing (only one mutable reference allowed)
+
+### Example:
+<pre><br>
+fn main() {
+    let s1 = String::from("Hello");
+
+    let s2 = &s1; // Immutable borrow
+    let s3 = &s1; // Another immutable borrow
+    println!("{}", s2);  // Works fine
+    println!("{}", s3);  // Works fine
+
+    // let s4 = &mut s1; // Error! Cannot have mutable and immutable borrows at the same time
+}<br></pre>
+### Explanation:
+s2 aur s3 ne s1 ko immutable borrow kiya hai, isliye dono ko ek saath access kar sakte hain.
+
+Agar tum mutable borrow ka use karte ho, to sirf ek hi mutable borrow allowed hota hai.
+
+##  4. Mutable Borrowing – Only One at a Time:
+Rust mein ek waqt mein sirf ek hi mutable reference allow hoti hai. Yeh is liye hota hai taake data races na ho aur program safe ho.
+
+### Example:
+ <pre><br>
+fn main() {
+    let mut s1 = String::from("Hello");
+
+    let s2 = &mut s1; // Mutable borrow
+    println!("{}", s2);  // Works fine
+
+    // let s3 = &mut s1; // Error! Can't borrow 's1' as mutable more than once
+}<br></pre>
+### Explanation:
+s2 ne s1 ko mutable borrow kiya hai, aur uske baad koi aur mutable reference nahi banayi ja sakti.
+
+## 5. Borrowing and Function Arguments:
+Rust mein tum function arguments ko pass karne ke liye ownership transfer ya borrowing ka use karte ho. Agar tum ownership pass karte ho, to function ke baad original variable use nahi ho sakta.
+
+## Example (Ownership Transfer):
+<pre><br>
+fn takes_ownership(s: String) {
+    println!("{}", s);
+} // 's' goes out of scope here, so the value is dropped
+
+fn main() {
+    let s1 = String::from("Hello");
+    takes_ownership(s1);  // Ownership of s1 moves to the function
+
+    // println!("{}", s1);  // Error! 's1' is no longer valid
+}<br></pre>
+### Example (Immutable Borrowing):
+<pre><br>
+fn borrow_string(s: &String) {
+    println!("{}", s);  // s is borrowed, ownership is not taken
+}
+
+fn main() {
+    let s1 = String::from("Hello");
+    borrow_string(&s1);  // Borrowing the value
+
+    println!("{}", s1);  // Works fine, ownership is still with 's1'
+}<br></pre>
+### Explanation:
+Ownership transfer ke case mein s1 function ke andar jaa kar destroy ho jata hai.
+
+Borrowing ke case mein s1 ka ownership transfer nahi hota, aur tum main function ke baad bhi s1 ko access kar sakte ho.
+
+## 6. The Rule of Lifetime in Borrowing:
+Rust mein ek aur important cheez hai lifetimes. Lifetime ensures karte hain ke references valid rahein aur kisi bhi invalid memory access se bachaye.
 
