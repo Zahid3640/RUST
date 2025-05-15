@@ -147,3 +147,89 @@ list.push(4);<br></pre>
 Rust smart hai — agar tum type nahi bhi do, to woh guess kar leta hai:
 <pre><br>let name = "Zahid"; // Rust assumes &str
 let num = 50;       // Rust assumes i32<br></pre>
+#  Functions and Scope in Rust 
+## 1. What is a Function?
+Rust mein function ek block of code hota hai jo specific kaam karta hai. Isse reuse, structure aur clarity milti hai.
+### Syntax:
+<pre><br>fn function_name(parameter: Type) -> ReturnType {
+    // body
+}<br></pre>
+## 2. Hello Function Example
+<pre><br>
+fn main() {
+    greet(); // function call
+}
+
+fn greet() {
+    println!("Hello, Zahid!");
+}<br></pre>
+### Output:
+<pre><br>
+Hello, Zahid!<br></pre>
+📌 fn keyword function define karta hai.
+📌 greet() function ko main ke andar call kiya gaya.
+
+## 3. Function with Parameters and Return Type
+<pre><br>
+fn main() {
+    let sum = add(5, 3);
+    println!("Sum is: {}", sum);
+}
+
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}<br></pre>
+### Output:
+<pre><br>
+Sum is: 8<br></pre>
+🔍 Breakdown:
+fn add(a: i32, b: i32) -> i32 → ye function 2 integers leta hai aur integer return karta hai.
+
+a + b is the return value (last expression without semicolon returns it).
+
+## 4. Functions with Return using return
+<pre><br>
+fn square(x: i32) -> i32 {
+    return x * x;
+}<br></pre>
+Agar aap return use karte ho, to uske baad ; lagta hai.
+Agar return implicitly karna ho, to semicolon nahi lagate.
+
+## 5. Function with No Return (Unit Type)
+ <pre><br>
+fn say_hello() {
+    println!("Hello!");
+}<br></pre>
+Yahan function kuch return nahi karta, iska return type hota hai () (called Unit).
+
+
+# Scope in Rust
+## What is Scope?
+Scope ka matlab hai: kahan tak koi variable ya function "visible" ya "accessible" hai.
+Rust mein block {} ke andar jo variable declare hota hai, wo usi block tak limited hota hai.
+ ### Variable Scope Example
+<pre><br>fn main() {
+    let name = "Zahid";
+    {
+        let age = 25;
+        println!("Inside block: {}, {}", name, age);
+    }
+    // println!("{}", age); ❌ Error: `age` is out of scope
+    println!("Outside block: {}", name);
+}<br></pre>
+✅ Output:
+<pre><br>Inside block: Zahid, 25
+Outside block: Zahid<br></pre>
+🔍 age block ke andar define hua, isliye block ke bahar use nahi ho sakta.
+
+### Function Scope
+<pre><br>fn main() {
+    let x = 10;
+    print_number();
+    // println!("{}", y); ❌ Error: y is out of scope
+}
+
+fn print_number() {
+    let y = 20;
+    println!("Inside print_number: {}", y);
+}<br></pre>
