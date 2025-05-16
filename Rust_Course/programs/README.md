@@ -619,7 +619,6 @@ Yahan x block ke baad destroy ho jata hai, lekin r uska reference rakh raha hai 
 
 # Lifetime in Structs
 Agar aap struct mein reference rakhte ho, to lifetime specify karna zaroori hai:
-
 <pre><br>
 struct Person<'a> {
     name: &'a str,
@@ -630,4 +629,53 @@ fn main() {
     let p = Person { name: &name };
     println!("{}", p.name);
 }<br></pre>
+# 🔹 Closures in Rust – (Functions ko variable ki tarah treat karna)
+# 🔥 What is a Closure?
+Closure Rust mein anonymous function hoti hai — yani naam ke bagair function. Ye kisi variable mein store hoti hai aur doosray functions ko pass bhi ki ja sakti hai.
+
+## ✅ Syntax:
+<pre><br>let closure_name = |parameter| expression;
+## ✅ Example:
+<pre><br>let add = |a: i32, b: i32| a + b;
+
+println!("{}", add(2, 3)); // Output: 5<br></pre>
+## 🔍 Difference between fn and closure:
+<pre><br>Function                  	Closure
+Static hoti hai        	Dynamic hoti hai
+Named hoti hai	         Anonymous hoti hai
+Parameters fixed	       Parameters flexible<br></pre>
+
+## 🧠 Closures capture variables:
+<pre><br>let x = 5;
+let print_x = || println!("X is: {}", x);
+
+print_x(); // X is: 5<br></pre>
+👉 Closure automatically x ko apne andar "capture" kar leta hai — isi ko lexical scope capturing kehte hain.
+
+🔸 Iterators in Rust – (Looping in a smart way)
+Rust mein iterators allow karte hain ke hum collections (arrays, vectors, etc.) pe loop kar sakein with smart functions.
+
+## ✅ Example 1: Basic loop
+<pre><br>let nums = vec![1, 2, 3];
+for n in nums.iter() {
+    println!("{}", n);
+}<br></pre>
+## ✅ Example 2: Using .map() with Closure
+<pre><br>let nums = vec![1, 2, 3];
+let doubled: Vec<i32> = nums.iter().map(|x| x * 2).collect();
+
+println!("{:?}", doubled); // [2, 4, 6]<br></pre>
+## ✅ .filter() Example:
+<pre><br>let nums = vec![1, 2, 3, 4];
+let evens: Vec<_> = nums.into_iter().filter(|x| x % 2 == 0).collect();
+
+println!("{:?}", evens); // [2, 4]<br></pre>
+## ⚠️ Important Functions with Iterators:
+<pre><br>Function                   	Kaam
+.map()                	Har item ko change karta hai
+.filter()	             Sirf woh items rakhta hai jo condition match karein
+.fold()	               Ek total ya result banata hai
+.any()	                Check karta hai koi ek item condition match karta hai ya nahi
+.all()                	Sab items condition match karte hain ya nahi<br></pre>
+
 
