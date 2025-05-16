@@ -671,7 +671,7 @@ let evens: Vec<_> = nums.into_iter().filter(|x| x % 2 == 0).collect();
 
 println!("{:?}", evens); // [2, 4]<br></pre>
 ## ⚠️ Important Functions with Iterators:
-<pre><br>Function                   	Kaam
+<pre><br>*Function*              *	Kaam*
 .map()                	Har item ko change karta hai
 .filter()	             Sirf woh items rakhta hai jo condition match karein
 .fold()	               Ek total ya result banata hai
