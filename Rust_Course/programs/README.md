@@ -1023,4 +1023,118 @@ Package	          Cargo project with one or more crates
 mod	              Module declare karne ke liye
 pub              	Public banaane ke liye
 use              	Shortcut access dene ke liye<br></pre>
+# *Error Handling in RusT*
+Rust exception-based model use nahi karta (like try/catch).
+Instead, Rust compile-time pe force karta hai ke aap errors ko handle karo.
 
+## 🔹 Rust mein do types ke errors hote hain:
+Type	Description
+1. Recoverable	Aisi error jise handle karke program continue kar sakta hai (e.g., file not found).
+2. Unrecoverable	Aisi error jahan program ko crash karna chahiye (e.g., array out of bounds).
+
+## 🔸 1. Result Enum (Recoverable Errors)
+<pre><br>
+enum Result<T, E> {
+    Ok(T),
+    Err(E),
+}<br></pre>
+### Example:
+<pre><br>
+use std::fs::File;
+
+fn main() {
+    let file = File::open("test.txt");
+
+    match file {
+        Ok(f) => println!("File opened successfully!"),
+        Err(e) => println!("Failed to open file: {}", e),
+    }
+}<br></pre>
+## 🔸 2. Option Enum (for optional values)
+<pre><br>
+enum Option<T> {
+    Some(T),
+    None,
+}<br></pre>
+### Example:
+<pre><br>
+fn get_username(id: u32) -> Option<String> {
+    if id == 1 {
+        Some("Zahid".to_string())
+    } else {
+        None
+    }
+}
+
+fn main() {
+    let name = get_username(2);
+    match name {
+        Some(n) => println!("Username: {}", n),
+        None => println!("No username found."),
+    }
+}<br></pre>
+## 🔸 3. unwrap() — Quick & Dirty ❌ (Only if you're 100% sure)
+<pre><br>
+let file = File::open("test.txt").unwrap();
+Agar Ok() milta hai to value return karta hai.<br></pre>
+
+Agar Err() milta hai to program panic karega.
+
+## 🔸 4. expect() — unwrap() + custom error
+<pre><br>
+let file = File::open("test.txt").expect("Failed to open file");<br></pre>
+Better than unwrap() because ye custom message show karta hai.
+
+## 🔸 5. ? Operator — Short way to return error
+Agar aap function ke result ko handle nahi karna chahte, to ? operator use karo to error ko aage return kar do.
+
+<pre><br>
+use std::fs::File;
+use std::io::{self, Read};
+
+fn read_file() -> Result<String, io::Error> {
+    let mut f = File::open("data.txt")?; // if error, return it
+    let mut content = String::new();
+    f.read_to_string(&mut content)?;
+    Ok(content)
+}<br></pre>
+? operator internally match karta hai:
+
+<pre><br>
+match File::open("data.txt") {
+    Ok(f) => f,
+    Err(e) => return Err(e),
+}<br></pre>
+# 🔸 6. Custom Error Types (Advanced)
+<pre><br>
+use std::fmt;
+
+#[derive(Debug)]
+enum MyError {
+    NotFound,
+    PermissionDenied,
+}
+
+impl fmt::Display for MyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{:?}", self)
+    }
+}<br></pre>
+## 🔹 7. panic!?
+Jab Rust ka program kisi serious error mein phase jaye, aur aage chalna unsafe ho, to Rust use roknay ke liye crash karta hai. Ye crash panic! macro ke through hota hai.
+
+Think of panic! as:
+
+## "Yeh problem bohat bara hai. Main program ko yahan rokun ga!"
+
+## ✅ Syntax:
+<pre><br>
+panic!("Kuch toh ghalat ho gaya!");<br></pre>
+## 🔸 Summary Table
+<pre><br>Method                       	Use-case
+Result<T, E>               	Handle recoverable error
+Option<T>	                  Value may be present or not
+unwrap()                   	Get value or panic
+expect()	                   unwrap + custom message
+? operator                  	Propagate error easily
+panic!()	                Crash program immediately (unrecoverable)<br></pre>
