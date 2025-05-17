@@ -149,6 +149,17 @@ list.push(4);<br></pre>
 Rust smart hai — agar tum type nahi bhi do, to woh guess kar leta hai:
 <pre><br>let name = "Zahid"; // Rust assumes &str
 let num = 50;       // Rust assumes i32<br></pre>
+##  Shadowing in Rust – "Purane Variable Par Naya Naam Daal Dena"
+Rust mein shadowing ka matlab hota hai ek hi variable ka naam dobara use karna, lekin nayi value ke sath. Is se purani value overwrite nahi hoti, balke "shadow" ho jaati hai — yani naya version us purane ko chhupaa deta hai.
+
+## Example:
+<pre><br>
+fn main() {
+    let x = 5;
+    let x = x + 1;
+    let x = x * 2;
+    println!("x: {}", x); // Output: x: 12
+}<br></pre>
 #  🔶🔶🔶🔶 *Functions and Scope in Rust*
 *************************************************************
 ## 1. What is a Function?
