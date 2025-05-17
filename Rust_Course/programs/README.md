@@ -782,7 +782,7 @@ enum Option<T> {
 <pre><br>
 trait Speak {
     fn speak(&self);
-}
+}<br></pre>
 ## Implement Trait for Struct
 <pre><br>
 struct Person;
