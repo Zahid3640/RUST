@@ -1138,3 +1138,133 @@ unwrap()                   	Get value or panic
 expect()	                   unwrap + custom message
 ? operator                  	Propagate error easily
 panic!()	                Crash program immediately (unrecoverable)<br></pre>
+# 🔶🔶🔶 *Concurrency in Rust: Mutex, Arc, and Threads* 
+***********************************************************************
+Rust mein Concurrency (multiple tasks ko ek hi waqt mein chalana) ko handle karna kuch unique hai. Rust ki ownership system ko dhyan mein rakhtay hue concurrency safe banaya gaya hai.
+
+# 🔶 1. Threads in Rust:
+Rust mein threads ko create karna kaafi asaan hai. Tum easily ek thread create kar ke usme koi bhi kaam perform kar sakte ho.
+
+<pre><br>
+use std::thread;
+
+fn main() {
+    let handle = thread::spawn(|| {
+        println!("Thread started");
+    });
+
+    handle.join().unwrap(); // Waits for the thread to finish
+    println!("Main thread finished");
+}<br></pre>
+###  Explanation:
+## thread::spawn se ek naya thread start hota hai.
+
+## join() method thread ke complete hone tak wait karne ka kaam karta hai.
+
+## 🔶 2. Sharing Data Between Threads:
+Rust mein shared data ko multiple threads ke beech safely share karna thoda tricky hota hai. Mutex aur Arc isko manage karte hain.
+
+Mutex (Mutual Exclusion):
+<pre><br>
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let counter = Arc::new(Mutex::new(0));
+
+    let mut handles = vec![];
+
+    for _ in 0..10 {
+        let counter = Arc::clone(&counter);
+        let handle = thread::spawn(move || {
+            let mut num = counter.lock().unwrap();
+            *num += 1;
+        });
+
+        handles.push(handle);
+    }
+
+    for handle in handles {
+        handle.join().unwrap();
+    }
+
+    println!("Counter: {}", *counter.lock().unwrap());
+}<br></pre>
+## Explanation:
+Mutex: Yeh ek lock mechanism hai jo ek time par sirf ek thread ko data access karne ki permission deta hai.
+
+lock() ke through data ko access karte hain. Jab ek thread ka kaam complete hota hai, lock release ho jata hai.
+
+Arc ek atomic reference counter hai jo multiple threads ko ek hi resource share karne ki permission deta hai.
+
+## 🔶 3. Arc (Atomic Reference Counting):
+<pre><br>
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let counter = Arc::new(Mutex::new(0));
+
+    let counter1 = Arc::clone(&counter);
+    let counter2 = Arc::clone(&counter);
+
+    let handle1 = thread::spawn(move || {
+        let mut num = counter1.lock().unwrap();
+        *num += 1;
+    });
+
+    let handle2 = thread::spawn(move || {
+        let mut num = counter2.lock().unwrap();
+        *num += 1;
+    });
+
+    handle1.join().unwrap();
+    handle2.join().unwrap();
+
+    println!("Counter: {}", *counter.lock().unwrap());
+}<br></pre>
+## Explanation:
+Arc (atomic reference counter) se multiple threads ko shared ownership milti hai.
+
+Mutex ke saath use karte hue, Arc allow karta hai multiple threads ko ek shared resource ko safely access karna.
+
+## 🔶 4. Deadlock Problem in Rust:
+Rust deadlock ka issue naturally avoid karta hai because ownership system threads ko deadlock ke chance ko kam karta hai.
+
+Deadlock Example:
+<pre><br>
+use std::sync::{Arc, Mutex};
+use std::thread;
+
+fn main() {
+    let mutex1 = Arc::new(Mutex::new(0));
+    let mutex2 = Arc::new(Mutex::new(0));
+
+    let handle1 = thread::spawn(move || {
+        let _lock1 = mutex1.lock().unwrap();
+        println!("Thread 1 locked mutex 1");
+
+        let _lock2 = mutex2.lock().unwrap(); // Will cause deadlock
+        println!("Thread 1 locked mutex 2");
+    });
+
+    let handle2 = thread::spawn(move || {
+        let _lock2 = mutex2.lock().unwrap();
+        println!("Thread 2 locked mutex 2");
+
+        let _lock1 = mutex1.lock().unwrap(); // Will cause deadlock
+        println!("Thread 2 locked mutex 1");
+    });
+
+    handle1.join().unwrap();
+    handle2.join().unwrap();
+}<br></pre>
+Yeh deadlock tab hota hai jab ek thread mutex 1 ko lock karta hai aur doosra thread mutex 2 ko lock karta hai, aur phir dono threads ko doosre mutex ki zaroorat padti hai. Yeh ek deadlock situation create karta hai.
+
+## 🧠 Summary:
+<pre><br>Concept	                         Explanation
+thread::spawn               	Ek naya thread create karta hai
+Mutex                       	Data ko lock kar ke safe access deta hai
+Arc                         	Multiple threads ko ek shared resource safely access karne deta hai
+lock()	                      Data ko access karne ke liye lock ka use karta hai
+Deadlock	                    Jab do threads ek dusre ka resource wait karte hain aur koi bhi proceed nahi kar pata<br></pre>
