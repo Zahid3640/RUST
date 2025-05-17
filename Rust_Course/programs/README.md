@@ -733,6 +733,137 @@ Purpose             	Multiple fields in one structure	    One value from multipl
 Examples	           Person, Car, Student	                 Result, Option, PaymentMethod
 Data Combination   	All fields must exist                	Only one variant is active at a time
 Matching           	Access fields directly	                se match to handle each variant<br></pre>
+# What are Generics?
+ Generic ka matlab hota hai "generalized type" — aap code likhtay ho jo har tarah ke data types ke liye kaam karein.
 
+## Example: Without generics (Duplicate Code)
+<pre><br>
+fn print_i32(x: i32) {
+    println!("i32 value: {}", x);
+}
+
+fn print_str(x: &str) {
+    println!("str value: {}", x);
+}<br></pre>
+##  With Generics (Ek hi function sab ke liye)
+<pre><br>
+fn print_value<T: std::fmt::Display>(x: T) {
+    println!("Value: {}", x);
+}
+
+fn main() {
+    print_value(42);        // i32
+    print_value("Zahid");   // &str
+    print_value(3.14);      // f64
+}<br></pre>
+🔸 T is just a placeholder for any type.
+T: Display ka matlab — T must be printable.
+
+## 📦 Use in Structs and Enums
+## Struct with Generic
+<pre><br>
+struct Point<T> {
+    x: T,
+    y: T,
+}
+
+let p1 = Point { x: 1, y: 2 };
+let p2 = Point { x: 3.5, y: 4.5 };<br></pre>
+##  Enum with Generic
+<pre><br>
+enum Option<T> {
+    Some(T),
+    None,
+}<br></pre>
+# What is a Trait?
+ Trait Rust ka interface jaisa concept hai — define karta hai kya behavior expected hai kisi type se.
+
+## Trait Declaration
+<pre><br>
+trait Speak {
+    fn speak(&self);
+}
+## Implement Trait for Struct
+<pre><br>
+struct Person;
+
+impl Speak for Person {
+    fn speak(&self) {
+        println!("Hello! I am a person.");
+    }
+}
+
+let p = Person;
+p.speak(); // Output: Hello! I am a person.<br></pre>
+## Trait Bounds with Generics
+Jab aap chahte ho ke generic types sirf specific behavior wale types ko accept karein.
+<pre><br>
+fn describe<T: Speak>(item: T) {
+    item.speak();
+}<br></pre>
+## Traits with Multiple Bounds
+<pre><br>
+use std::fmt::Display;
+use std::fmt::Debug;
+
+fn print_info<T: Display + Debug>(x: T) {
+    println!("Display: {}", x);
+    println!("Debug: {:?}", x);
+}<br></pre>
+## Default Methods in Traits
+Aap ek method trait mein default define kar sakte ho.
+<pre><br>
+trait Greet {
+    fn say_hi(&self) {
+        println!("Hi from default!");
+    }
+}
+
+struct User;
+impl Greet for User {}
+
+let u = User;
+u.say_hi(); // "Hi from default!"<br></pre>
+## Returning Trait Objects (Dynamic Dispatch)
+<pre><br>
+trait Animal {
+    fn speak(&self);
+}
+
+struct Dog;
+struct Cat;
+
+impl Animal for Dog {
+    fn speak(&self) {
+        println!("Woof!");
+    }
+}
+impl Animal for Cat {
+    fn speak(&self) {
+        println!("Meow!");
+    }
+}
+
+fn get_animal(s: &str) -> Box<dyn Animal> {
+    if s == "dog" {
+        Box::new(Dog)
+    } else {
+        Box::new(Cat)
+    }
+}<br></pre>
+## Trait vs Generic – Difference
+<pre><br>Feature	               Trait (interface)	                      Generic (type parameter)
+Use-case          	Behavior define karna                     	Type ko flexible rakhna
+Syntax            	trait TraitName {}                         	fn name<T>() {}
+Reuse              	Multiple types me behavior               	Multiple types me logic
+Dispatch type	      Static or Dynamic (dyn)	                  Mostly static (compile-time)<br></pre>
+
+##  Summary:
+<pre><br>Topic                       	Explanation
+T                  	   Generic type placeholder
+trait	                 Interface/behavior definition
+impl                   TraitName for Type	Trait ko implement karna
+T: TraitName	          Generic ke liye constraint
+dyn Trait	             Trait object (runtime behavior)<br></pre>
 
 
