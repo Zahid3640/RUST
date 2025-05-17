@@ -883,7 +883,7 @@ Har crate ka entry point hota hai:
 
 ##  Example:
 <pre><br>
-cargo new hello_crate
+cargo new hello_crate<br></pre>
 <pre><br>
 // src/main.rs
 fn main() {
