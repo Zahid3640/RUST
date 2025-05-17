@@ -1268,3 +1268,208 @@ Mutex                       	Data ko lock kar ke safe access deta hai
 Arc                         	Multiple threads ko ek shared resource safely access karne deta hai
 lock()	                      Data ko access karne ke liye lock ka use karta hai
 Deadlock	                    Jab do threads ek dusre ka resource wait karte hain aur koi bhi proceed nahi kar pata<br></pre>
+# 🔶🔶🔶 *TESTING* 
+**************************************************************
+# Summary:
+<pre><br>Concept	                           Explanation
+Unit Tests                 	Specific function ya logic ko test karna.
+Integration Tests	          Multiple functions ya modules ko test karna.
+Documentation Tests        	Documentation mein code examples ko validate karna.
+Assertions                  Test cases ke andar conditions ko check karna<br></pre>
+# 🔶🔶🔶  *Rust Web Frameworks*
+****************************************************************
+Rust ka web development ecosystem abhi kaafi grow kar raha hai. Rust ke web frameworks ka major faida yeh hai ke yeh tumhare code ko safe aur fast banate hain, jo ke Rust ke core features hain. Rust ke web frameworks ka use kar ke tum highly concurrent aur parallel applications bana sakte ho jo memory safety guarantee karte hain.
+
+## 🔶 1. Rocket Framework
+Rocket ek high-level web framework hai jo tumhe easy-to-use aur developer-friendly features deta hai. Yeh framework highly type-safe hai aur Rust ke features ka best use karta hai, jaise ownership aur borrowing.
+
+## Features:
+Routing: Easy routing system jisme tum URL patterns define kar sakte ho.
+
+Type Safety: Rocket ki major strength yeh hai ke yeh tumhare code ko type-safe banata hai, matlab ke errors compile-time par hi handle ho jaate hain.
+
+Request Guards: Tum request guards define kar sakte ho jo tumhare HTTP requests ko filter karte hain.
+
+Templating: Rocket mein built-in templating support hota hai jisse tum HTML pages ko dynamically render kar sakte ho.
+
+## Example:
+<pre><br>
+use rocket::{get, launch, routes};
+
+#[get("/")]
+fn hello() -> &'static str {
+    "Hello, Rocket!"
+}
+
+#[launch]
+fn rocket() -> _ {
+    rocket::build().mount("/", routes![hello])
+}<br></pre>
+## Explanation:
+
+#[get("/")]: Yeh request ko handle karta hai jo root URL pe aati hai.
+
+rocket::build(): Rocket application ko build karta hai.
+
+## When to Use Rocket:
+Jab tumhe type safety, simple routing, aur templating ki zaroorat ho.
+
+Jab tum web applications ko quickly develop karna chahte ho.
+
+## 🔶 2. Actix-Web Framework
+Actix-Web ek fast aur powerful web framework hai jo Rust ke performance ke faayde ko fully use karta hai. Yeh framework highly concurrent hai aur tumhe asynchronous programming ko leverage karne ka moka deta hai.
+
+## Features:
+Asynchronous: Actix Web ka core asynchronous programming hai, jo tumhe concurrency aur parallelism ki madad se fast requests handle karne mein madad karta hai.
+
+Actor-based Model: Actix Web actor model use karta hai jo threads ko efficiently manage karne mein madad karta hai.
+
+Routing: Actix Web mein powerful routing system hai, jisme tum complex URL patterns define kar sakte ho.
+
+Middleware Support: Yeh tumhe middleware define karne ki suvidha deta hai jaise logging, authentication, etc.
+
+## Example:
+<pre><br>
+use actix_web::{web, App, HttpServer, Responder};
+
+async fn hello() -> impl Responder {
+    "Hello, Actix Web!"
+}
+
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new().route("/", web::get().to(hello))
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
+    .await
+}<br></pre>
+## Explanation:
+
+async fn hello() -> impl Responder: Yeh async function hai jo HTTP request handle karta hai.
+
+HttpServer::new(): Actix Web server ko start karta hai.
+
+.bind("127.0.0.1:8080"): Server ko bind karta hai ek specific IP aur port par.
+
+## When to Use Actix:
+Jab tumhe high-performance aur concurrency handle karni ho.
+
+Jab tum asynchronous programming ko use karte hue large-scale applications build karna chahte ho.
+
+## 🔶 3. Tide Framework
+Tide ek simple aur asynchronous web framework hai jo tumhe lightweight aur fast web applications banane ki suvidha deta hai.
+
+## Features:
+Async by Default: Tide fully asynchronous hai, jo tumhe efficient concurrency aur parallelism provide karta hai.
+
+Extensible: Tum apni custom middleware aur features add kar sakte ho.
+
+Lightweight: Yeh framework kaafi lightweight hai, jo simple web applications ke liye perfect hai.
+
+## Example:
+<pre><br>
+use tide::Request;
+
+async fn hello_world(_: Request<()>) -> &'static str {
+    "Hello, Tide!"
+}
+
+#[async_std::main]
+async fn main() -> Result<(), std::io::Error> {
+    let mut app = tide::new();
+    app.at("/").get(hello_world);
+    app.listen("127.0.0.1:8080").await?;
+    Ok(())
+}<br></pre>
+## Explanation:
+
+app.at("/").get(hello_world): Yeh URL path define karta hai aur hello_world function ko map karta hai.
+
+app.listen(): Web server ko specific IP aur port par listen karne ke liye start karta hai.
+
+## When to Use Tide:
+Jab tum simple, lightweight aur asynchronous web applications develop karna chahte ho.
+
+Jab tumhein ek easy-to-use aur quick web framework ki zaroorat ho.
+
+## 🔶 4. Warp Framework
+Warp ek highly flexible aur powerful web framework hai, jo Rust ke async aur filter-based architecture ka use karta hai. Yeh framework composable filters ke concept par based hai.
+
+## Features:
+Filter-based Architecture: Yeh tumhe filters define karne ki suvidha deta hai jo requests ko process karte hain.
+
+Async by Default: Warp bhi asynchronous hai, jo tumhein concurrency aur parallelism efficiently handle karne mein madad karta hai.
+
+Composable: Tum filters ko easily compose kar sakte ho, jisse complex tasks ko handle karna asaan ho jaata hai.
+
+## Example:
+<pre><br>
+use warp::Filter;
+
+#[tokio::main]
+async fn main() {
+    let hello = warp::path!("hello" / String)
+        .map(|name| format!("Hello, {}!", name));
+
+    warp::serve(hello)
+        .run(([127, 0, 0, 1], 3030))
+        .await;
+}<br></pre>
+## Explanation:
+
+warp::path!("hello" / String): Yeh ek path define karta hai jo /hello/{name} URL ko handle karega.
+
+warp::serve(hello): Server ko run karta hai aur incoming requests ko handle karta hai.
+
+## When to Use Warp:
+Jab tumhe flexible aur composable filters ka use karte hue web applications build karne ho.
+
+Jab tum asynchronous programming ke sath flexible architecture chahte ho.
+
+## 🔶 5. Hyper Framework
+Hyper ek low-level web framework hai jo tumhe HTTP server aur client ka kaam karne ki suvidha deta hai. Yeh framework fast aur efficient hai, lekin tumhein zyada customization aur control ka option deta hai.
+
+## Features:
+Low-level HTTP: Hyper tumhe low-level HTTP control deta hai, jo tumhein custom web servers aur clients banane mein madad karta hai.
+
+Asynchronous: Yeh bhi asynchronous hai, jo concurrency ko efficiently handle karta hai.
+
+## Example:
+<pre><br>
+use hyper::{Body, Client, Request, Response, Server};
+use hyper::service::{make_service_fn, service_fn};
+
+async fn hello(req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
+    Ok(Response::new(Body::from("Hello, Hyper!")))
+}
+
+#[tokio::main]
+async fn main() {
+    let make_svc = make_service_fn(|_conn| async { Ok::<_, hyper::Error>(service_fn(hello)) });
+
+    let addr = ([127, 0, 0, 1], 8080).into();
+    let server = Server::bind(&addr).serve(make_svc);
+
+    println!("Listening on http://{}", addr);
+    server.await.unwrap();
+}<br></pre>
+## Explanation:
+
+hyper::service::service_fn: Yeh function request ko handle karta hai.
+
+Server::bind(&addr): Server ko bind karta hai ek specific address aur port par.
+
+## When to Use Hyper:
+Jab tumhe custom HTTP server ya client banane ki zaroorat ho.
+
+Jab tum low-level control chahte ho apne web server par.
+
+## 🧠 Summary:
+<pre><br>Framework                  	Features                     	Use Case
+Rocket             	Type safety, Routing,               Templating	Simple aur safe web applications
+Actix-Web          	High performance, Asynchronous     	Large-scale, high-performance web applications
+Tide	               Lightweight, Async by default	      Simple, quick web applications
+Warp	              Composable filters, Asynchronous	    Flexible web applications with custom filters
+Hyper             	Low-level control, Asynchronous     	Custom HTTP server/client<br></pre>
