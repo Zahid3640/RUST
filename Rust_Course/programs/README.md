@@ -634,7 +634,7 @@ fn main() {
 Closure Rust mein anonymous function hoti hai — yani naam ke bagair function. Ye kisi variable mein store hoti hai aur doosray functions ko pass bhi ki ja sakti hai.
 
 ## ✅ Syntax:
-<pre><br>let closure_name = |parameter| expression;
+<pre><br>let closure_name = |parameter| expression;<br></pre>
 ## ✅ Example:
 <pre><br>let add = |a: i32, b: i32| a + b;
 
