@@ -865,5 +865,162 @@ trait	                 Interface/behavior definition
 impl                   TraitName for Type	Trait ko implement karna
 T: TraitName	          Generic ke liye constraint
 dyn Trait	             Trait object (runtime behavior)<br></pre>
+# *Modules and Crates* 
+## Rust ke Code Structure ke 3 Important Components
+<pre><br>Concept                    	Matlab
+Crate             	Ek complete binary ya library project
+Module            	Code ka logical group (file or block)
+Package	          Cargo ka ek project jo ek ya zyada crates contain kar sakta hai<br></pre>
 
+##  1. What is a Crate?
+Crate Rust ka smallest compilation unit hai.
+Har binary (executable) aur library ek crate hoti hai.
+Har crate ka entry point hota hai:
+
+### main.rs for binary crate
+
+### lib.rs for library crate
+
+##  Example:
+<pre><br>
+cargo new hello_crate
+<pre><br>
+// src/main.rs
+fn main() {
+    println!("Hello from main crate!");
+}<br></pre>
+## 2. What is a Module?
+Module Rust mein code ko organize karne ka tareeqa hai.
+
+Har file/module can:
+
+Define structs, enums, functions, etc.
+
+Be public or private
+
+## Module create karne ke 3 tareeqe:
+### 🔹 A. Inline module (same file ke andar)
+<pre><br>
+mod greeting {
+    pub fn say_hello() {
+        println!("Hello, Zahid!");
+    }
+}
+
+fn main() {
+    greeting::say_hello();
+}<br></pre>
+### 🔹 B. Separate file module
+Folder structure:
+
+<pre><br>
+src/
+├── main.rs
+└── greeting.rs<br></pre>
+<pre><br>
+// main.rs
+mod greeting;<br></pre>
+<pre><br>
+fn main() {
+    greeting::say_hello();
+}<br></pre>
+<pre><br>
+// greeting.rs
+pub fn say_hello() {
+    println!("Hello from file!");
+}<br></pre>
+## 🔹 C. Nested module (folder inside folder)
+Folder structure:
+
+<pre><br>
+src/
+├── main.rs
+└── greeting/
+    ├── mod.rs
+    └── english.rs<br></pre>
+<pre><br>
+// main.rs
+mod greeting;
+
+fn main() {
+    greeting::english::say_hi();
+}<br></pre>
+<pre><br>
+// greeting/mod.rs
+pub mod english;<br></pre>
+<pre><br>
+// greeting/english.rs
+pub fn say_hi() {
+    println!("Hi Zahid!");
+}<br></pre>
+## 🔐 Public vs Private in Modules
+By default, everything is private.
+
+Use pub to expose (public) things.
+
+<pre><br>
+mod tools {
+    pub fn hammer() {
+        println!("Hammering!");
+    }
+
+    fn private_tool() {
+        println!("Can't call me from outside.");
+    }
+}
+
+fn main() {
+    tools::hammer(); // ✅ OK
+    // tools::private_tool(); ❌ error
+}<br></pre>
+## 🔹 use Keyword – Shortcut for Accessing Modules
+<pre><br>
+mod tools {
+    pub fn hammer() {
+        println!("Using hammer");
+    }
+}
+
+use tools::hammer;
+
+fn main() {
+    hammer(); // No need for tools::
+}<br></pre>
+# 🔶 3. What is a Package?
+A package contains 0 or 1 library crate and any number of binary crates.
+
+It has a Cargo.toml file.
+
+### Example:
+
+<pre><br>
+[package]
+name = "my_project"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]<br></pre>
+## 🔹 External Crates – 3rd Party Libraries
+External crates ko Cargo.toml mein add karo:
+
+<pre><br>
+[dependencies]
+rand = "0.8"
+Then use in your Rust file:<br></pre>
+
+<pre><br>
+use rand::Rng;
+
+fn main() {
+    let number = rand::thread_rng().gen_range(1..=10);
+    println!("Random: {}", number);
+}<br></pre>
+## 🧠 Summary Table
+<pre><br>Term                    	Meaning
+Crate            	Compilable unit (binary/lib)
+Module           	Code organization (folder/file)
+Package	          Cargo project with one or more crates
+mod	              Module declare karne ke liye
+pub              	Public banaane ke liye
+use              	Shortcut access dene ke liye<br></pre>
 
