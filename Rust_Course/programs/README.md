@@ -677,9 +677,9 @@ println!("{:?}", evens); // [2, 4]<br></pre>
 .fold()	               Ek total ya result banata hai
 .any()	                Check karta hai koi ek item condition match karta hai ya nahi
 .all()                	Sab items condition match karte hain ya nahi<br></pre>
-# struct in Rust – Structure Banane Ka Tareeqa
-Rust mein struct ka use hota hai custom data types banane ke liye, jisme tum multiple fields rakh sakte ho.
 
+# *struct in Rust – Structure Banane Ka Tareeqa*
+Rust mein struct ka use hota hai custom data types banane ke liye, jisme tum multiple fields rakh sakte ho.
 ## 🧠 Socho:
 Tum ek Person ka data represent karna chahte ho jisme name, age, aur email ho — to struct perfect hai.
 
@@ -690,8 +690,7 @@ Tum ek Person ka data represent karna chahte ho jisme name, age, aur email ho �
     email: String,
 }<br></pre>
 ###  Usage:
-<pre><br>
-fn main() {
+<pre><br>fn main() {
     let zahid = Person {
         name: String::from("Zahid Nawaz"),
         age: 25,
@@ -702,27 +701,20 @@ fn main() {
 }<br></pre>
 ## 🧾 Key Points:
 Struct ek data container hai.
-
 Tum multiple fields define kar sakte ho with different types.
-
 Structs reusable hote hain.
-
 # enum in Rust – Multiple Possible Options
 enum ka matlab hai "enumeration" — iska use hota hai jab tum ek value me multiple possible types ya states rakhna chahte ho.
-
 ## 🧠 Socho:
 Tumhare paas Payment Method ho sakta hai: Cash, CreditCard, ya Paypal.
-
 ## Syntax:
-<pre><br>
-enum PaymentMethod {
+<pre><br>enum PaymentMethod {
     Cash,
     CreditCard(String),
     Paypal(String),
 }<br></pre>
 ## Usage:
-<pre><br>
-fn main() {
+<pre><br>fn main() {
     let method = PaymentMethod::CreditCard(String::from("1234-5678-9012-3456"));
 
     match method {
@@ -733,14 +725,10 @@ fn main() {
 }<br></pre>
 ##  🧾 Key Points:
 Enum ka use hota hai jab tumhare data ke multiple shapes or states ho sakte hain.
-
 Har variant ke sath tum data attach bhi kar sakte ho.
-
 match ka use karke tum different cases ko handle kar sakte ho.
-
 ## struct vs enum – Comparison Table:
- <pre><br>
-Feature	                  struct	                               enum
+ <pre><br>Feature	                  struct	                               enum
 Purpose             	Multiple fields in one structure	    One value from multiple options
 Examples	           Person, Car, Student	                 Result, Option, PaymentMethod
 Data Combination   	All fields must exist                	Only one variant is active at a time
