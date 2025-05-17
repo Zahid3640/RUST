@@ -671,11 +671,80 @@ let evens: Vec<_> = nums.into_iter().filter(|x| x % 2 == 0).collect();
 
 println!("{:?}", evens); // [2, 4]<br></pre>
 ## ⚠️ Important Functions with Iterators:
-<pre><br>*Function*              *	Kaam*
+<pre><br>Function              Kaam
 .map()                	Har item ko change karta hai
 .filter()	             Sirf woh items rakhta hai jo condition match karein
 .fold()	               Ek total ya result banata hai
 .any()	                Check karta hai koi ek item condition match karta hai ya nahi
 .all()                	Sab items condition match karte hain ya nahi<br></pre>
+# struct in Rust – Structure Banane Ka Tareeqa
+Rust mein struct ka use hota hai custom data types banane ke liye, jisme tum multiple fields rakh sakte ho.
+
+## 🧠 Socho:
+Tum ek Person ka data represent karna chahte ho jisme name, age, aur email ho — to struct perfect hai.
+
+### Syntax:
+<pre><br> struct Person {
+    name: String,
+    age: u8,
+    email: String,
+}<br></pre>
+###  Usage:
+<pre><br>
+fn main() {
+    let zahid = Person {
+        name: String::from("Zahid Nawaz"),
+        age: 25,
+        email: String::from("zahid@example.com"),
+    };
+
+    println!("Name: {}, Age: {}, Email: {}", zahid.name, zahid.age, zahid.email);
+}<br></pre>
+## 🧾 Key Points:
+Struct ek data container hai.
+
+Tum multiple fields define kar sakte ho with different types.
+
+Structs reusable hote hain.
+
+# enum in Rust – Multiple Possible Options
+enum ka matlab hai "enumeration" — iska use hota hai jab tum ek value me multiple possible types ya states rakhna chahte ho.
+
+## 🧠 Socho:
+Tumhare paas Payment Method ho sakta hai: Cash, CreditCard, ya Paypal.
+
+## Syntax:
+<pre><br>
+enum PaymentMethod {
+    Cash,
+    CreditCard(String),
+    Paypal(String),
+}<br></pre>
+## Usage:
+<pre><br>
+fn main() {
+    let method = PaymentMethod::CreditCard(String::from("1234-5678-9012-3456"));
+
+    match method {
+        PaymentMethod::Cash => println!("Paid by Cash"),
+        PaymentMethod::CreditCard(number) => println!("Paid by Credit Card: {}", number),
+        PaymentMethod::Paypal(email) => println!("Paid via PayPal: {}", email),
+    }
+}<br></pre>
+##  🧾 Key Points:
+Enum ka use hota hai jab tumhare data ke multiple shapes or states ho sakte hain.
+
+Har variant ke sath tum data attach bhi kar sakte ho.
+
+match ka use karke tum different cases ko handle kar sakte ho.
+
+## struct vs enum – Comparison Table:
+ <pre><br>
+Feature	                  struct	                               enum
+Purpose             	Multiple fields in one structure	    One value from multiple options
+Examples	           Person, Car, Student	                 Result, Option, PaymentMethod
+Data Combination   	All fields must exist                	Only one variant is active at a time
+Matching           	Access fields directly	                se match to handle each variant<br></pre>
+
 
 
