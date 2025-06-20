@@ -1484,3 +1484,42 @@ Actix-Web          	High performance, Asynchronous     	Large-scale, high-perfor
 Tide	               Lightweight, Async by default	      Simple, quick web applications
 Warp	              Composable filters, Asynchronous	    Flexible web applications with custom filters
 Hyper             	Low-level control, Asynchronous     	Custom HTTP server/client<br></pre>
+# SPL Token Kya Hota Hai?
+## 🔷 SPL = Solana Program Library
+SPL Token ek standard hai jo Solana blockchain par Fungible ya Non-Fungible tokens banata hai — bilkul waise jaise:
+
+# Ethereum par ERC-20 (for FT) ya ERC-721 (for NFT) hotay hain.
+
+## SPL Token ka kaam:
+<pre><br>Coin ya token banana
+Use kisi ko transfer karna
+Mint, burn, freeze, set authority<br></pre>
+
+# SPL Tokens ki Types
+Type	Use Case
+<pre><br>🔹 SPL Fungible Token (SPL-FT)	Coins jaise SOL, USDC, ZahidCoin
+🔹 SPL Non-Fungible Token (SPL-NFT)	Digital Art, Tickets, Memberships
+🔹 SPL Token 2022	Updated version with new features (metadata, fees etc.)<br></pre>
+# Fungible vs Non-Fungible Token – Asaan Zabaan Mein
+# 🔹 Fungible Token (FT) – “Barabar aur Badalnay Wale”
+Matlab: Har unit same hoti hai, interchange kar sakte ho.
+
+# 🔸 Examples:
+<pre><br>1 Rupee = 1 Rupee
+1 SOL = 1 SOL
+1 ZahidCoin = 1 ZahidCoin<br></pre>
+
+# 🔹 Real-life Example:
+Jaise 100 rupee ke 100 note hain — har note barabar hai, kisi ka bhi use karo, farq nahi parta.
+
+# 🔸 Non-Fungible Token (NFT) – “Unique aur Alag”
+Matlab: Har token alag hota hai. Badal nahi sakte.
+
+## 🔸 Examples:
+<pre><br>Ek art ka piece
+Property document
+Certificate
+Digital photo NFT<br></pre>
+
+## 🔹 Real-life Example:
+Ek passport ya NIC — sab ke paas hota hai, lekin har ek unique hota hai.
