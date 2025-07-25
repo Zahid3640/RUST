@@ -1,4 +1,4 @@
-*🧠 What is Solana*
+#🧠 What is Solana#
 Solana ek high-performance blockchain platform hai jo decentralized applications (dApps) aur crypto tokens ke liye use hota hai.
 
 *✅ Keywords:*
