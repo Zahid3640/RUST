@@ -1,66 +1,3 @@
-# 🧠 What is Solana
-Solana ek high-performance blockchain platform hai jo decentralized applications (dApps) aur crypto tokens ke liye use hota hai.
-
-
-
-## 🧱 Solana ke Core Components:
-Hum Solana ko 10 important parts me divide karte hain:
-
-## 1. 🪙 SOL Token
-Solana ka native token hai: SOL
-
-Use hota hai transaction fees, staking aur smart contracts me
-
-### 💡 1 SOL = 1,000,000,000 lamports
-
-# 2. 🏗️ Programs (Smart Contracts)
-Rust ya C se likhe jaate hain
-
-Blockchain pe deploy hote hain
-
-Logic run karte hain jaise:
-
-Token banana
-
-NFT mint karna
-
-Voting app
-
-Games, DeFi etc.
-
-## 📁 Yeh “on-chain logic” hoti hai (jese backend server blockchain pe)
-
-
-# 6. ⚙️ Instructions
-Ek single action: like mint t
-# 8. 🔑 Keypairs & Wallets
-Public key = Address
-
-Private key = Signature banata hai
-
-Wallets:
-
-Phantom
-
-Solflare
-
-CLI wallet
-
-Paper / hardware wallets
-
-# 9. 🌐 Clusters
-Solana ke 3 major environments:
-<pre><br>
-Cluster   	 Purpose
-devnet	     Testing with fake SOL
-testnet	     Pre-mainnet testing
-mainnet	     Real production blockchain<br></pre>
-
-# 10. 🔄 Rent & Storage
-Account ko blockchain pe zinda rakhne ke liye "rent" chahiye
-
-Agar lamports rent se kam ho jaayein → account delete ho sakta hai
-
 # What is Solana?
 Solana ek high-performance blockchain platform hai jo Web3 apps aur crypto projects ke liye use hoti hai. Iska focus hai:
 ### ✅ Keywords:*
@@ -490,7 +427,7 @@ Validator uska signature verify karta hai.
 
 Agar sab valid hai, block mein include hota hai.
 
-# 16🔹 Solana ke Networks
+# 16🔹 Solana ke Networks(🌐 Clusters)
 <pre><br>
 Network	                Use
 Mainnet	            Real transaction, real SOL, production use
@@ -508,4 +445,8 @@ Feature                 	Value
 TPS                 	~65,000+ (theoretical)
 Block Time	             ~400ms
 Finality Time	           ~1–2 seconds<br></pre>
+# 19. 🔄 Rent & Storage
+Account ko blockchain pe zinda rakhne ke liye "rent" chahiye
+
+Agar lamports rent se kam ho jaayein → account delete ho sakta hai
 
