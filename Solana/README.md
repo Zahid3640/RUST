@@ -307,14 +307,14 @@ Yahi Turbine karta hai — viral-style data spreading.
 
 # 12. Pipelining
 Ek optimized system jo transaction fetching, processing, and writing ko multiple stages mein parallel karta hai.
-   ⏱️ Time →
+  <pre><br> ⏱️ Time →
    ┌──────────────┬──────────────┬──────────────┐
    │ Fetch Txns   │ Fetch Txns   │ Fetch Txns   │
    │ Sig Verify   │ Sig Verify   │ Sig Verify   │
    │ Execute Txns │ Execute Txns │ Execute Txns │
    │ Store Block  │ Store Block  │ Store Block  │
    └──────────────┴──────────────┴──────────────┘
-   🧱 Block 1        🧱 Block 2        🧱 Block 3
+   🧱 Block 1        🧱 Block 2        🧱 Block 3<br></pre>
 
 ✅ Saath saath kaam hone se speed barhti hai.
 
