@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "public_key": "HYTc5Y924rLn5YJkM5ZEpdLGzFizQrJ2XSAvLcVCkzfH",
+  "kdf": {
+    "algo": "argon2id",
+    "salt_b64": "nxcWLomf38oUtCzWDgzI6A==",
+    "m_cost": 19456,
+    "t_cost": 2,
+    "p_cost": 1
+  },
+  "crypto": {
+    "cipher": "aes-256-gcm",
+    "nonce_b64": "vZdpXRStfolB1oWG",
+    "ciphertext_b64": "s4qZ2uuiS+IG7cF56Y40a28NG2oVfQ0Nm5e1urpobxKx7DLlhyPa1MPu6/LbhW/raL2aUnMSSc7H+rfXnx3bQUTi8Y5pH+D9PfHNVeteuaeMT1hCLMmSBz+FWGB2ycYG+MlmsyXeje0BxPqTyva9aKWIk/r7IbWd/K5Ppz2w3ynKykyl/k25P84b2Z38xi3ccXKRq1G4BvTRhS2AcmraTzS+g0WTaeybo8w6tXmpS85H8XIeUK4HGBDPl5A5mNOTDUWHPVod33deNGyQt/vqabLR"
+  }
+}
