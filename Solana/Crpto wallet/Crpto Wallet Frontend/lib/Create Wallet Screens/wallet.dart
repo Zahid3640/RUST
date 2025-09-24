@@ -1,5 +1,5 @@
-import 'package:crpto_wallet/Create%20Wallet%20Screens/createpassword.dart';
-import 'package:crpto_wallet/Import%20Wallet%20Screens/import%20from%20seed%20phrase.dart';
+import 'package:crpto_wallet/Create%20Wallet%20Screens/create%20wallet.dart';
+import 'package:crpto_wallet/Import%20Wallet%20Screens/Seed%20Phrase/import%20from%20seed%20phrase.dart';
 import 'package:crpto_wallet/Import%20Wallet%20Screens/import%20wallet%20screen.dart';
 import 'package:crpto_wallet/Unlock%20Wallett/Unlock%20Screen.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +14,8 @@ class CryptoWalletScreen extends StatefulWidget {
 class _CryptoWalletScreenState extends State<CryptoWalletScreen> {
   bool isCreateLoading = false;
   bool isImportLoading = false;
-  bool isUnlockLoading = false;
 
-  bool get isAnyLoading => isCreateLoading || isImportLoading || isUnlockLoading;
+  bool get isAnyLoading => isCreateLoading || isImportLoading ;
 
   void _onCreatePressed() {
     if (isAnyLoading && !isCreateLoading) return; // ❌ block other buttons
@@ -44,21 +43,6 @@ class _CryptoWalletScreenState extends State<CryptoWalletScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const ImportWalletScreen()),
-      );
-    });
-  }
-
-  void _onUnlockPressed() {
-    if (isAnyLoading && !isUnlockLoading) return; // ❌ block other buttons
-
-    setState(() => isUnlockLoading = true);
-
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() => isUnlockLoading = false);
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const UnlockWalletScreen()),
       );
     });
   }
@@ -119,9 +103,8 @@ class _CryptoWalletScreenState extends State<CryptoWalletScreen> {
                 width: 281,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color.fromARGB(255, 94, 113, 41)),
-                    backgroundColor: const Color.fromARGB(255, 137, 158, 46),
-                    foregroundColor: Colors.black,
+                    side: const BorderSide(color: Color(0xFFBFFF08)),
+                    foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -133,7 +116,7 @@ class _CryptoWalletScreenState extends State<CryptoWalletScreen> {
                           width: 20,
                           height: 20,
                           child: CircularProgressIndicator(
-                            strokeWidth: 2,
+                            strokeWidth: 3,
                             color: Color(0xFFBFFF08),
                           ),
                         )
@@ -149,37 +132,6 @@ class _CryptoWalletScreenState extends State<CryptoWalletScreen> {
 
               const SizedBox(height: 20),
 
-              // 🔹 Unlock Wallet Button
-              SizedBox(
-                width: 281,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xFFBFFF08)),
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                  ),
-                  onPressed: _onUnlockPressed,
-                  child: isUnlockLoading
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Color(0xFFBFFF08),
-                          ),
-                        )
-                      : const Text(
-                          "Unlock Wallet",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                ),
-              ),
             ],
           ),
         ),

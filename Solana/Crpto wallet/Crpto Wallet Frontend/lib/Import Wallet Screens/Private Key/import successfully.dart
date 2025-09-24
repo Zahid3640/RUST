@@ -1,15 +1,14 @@
-import 'package:crpto_wallet/NFT/Nft%20Home%20Screen.dart';
-import 'package:crpto_wallet/Token/Token%20Home%20Screen.dart';
+import 'package:crpto_wallet/Token/Home/Token%20Home%20Screen.dart';
 import 'package:flutter/material.dart';
 
-class Successnft extends StatefulWidget {
-  const Successnft({super.key});
+class Walletimportsuccessfullyyy extends StatefulWidget {
+  const Walletimportsuccessfullyyy({super.key});
 
   @override
-  State<Successnft> createState() => _SuccessnftState();
+  State<Walletimportsuccessfullyyy> createState() => _WalletimportsuccessfullyyyState();
 }
 
-class _SuccessnftState extends State<Successnft> {
+class _WalletimportsuccessfullyyyState extends State<Walletimportsuccessfullyyy> {
   bool isLoading = false;
 
   void _onContinuePressed() {
@@ -25,7 +24,7 @@ class _SuccessnftState extends State<Successnft> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => NftHomeScreen(),
+          builder: (context) => TokenHomeScreen(),
         ),
       );
     });
@@ -58,7 +57,7 @@ class _SuccessnftState extends State<Successnft> {
               const SizedBox(height: 12),
 
               const Text(
-                "Congratulations! Your NFT has been\nsuccessfully created. Start\nshowcasing or trading it now!",
+                "You’ve successfully imported your\nwallet using the private key.",
                 style: TextStyle(color: Colors.white, fontSize: 16),
                 textAlign: TextAlign.center,
               ),
@@ -88,7 +87,7 @@ class _SuccessnftState extends State<Successnft> {
                           ),
                         )
                       : const Text(
-                          "View NFT",
+                          "Continue",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

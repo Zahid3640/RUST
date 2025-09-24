@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/notification.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/profile%20screen.dart';
-import 'package:crpto_wallet/NFT/Create%20Nft.dart';
-import 'package:crpto_wallet/Receive/receive%20token.dart';
-import 'package:crpto_wallet/Token/Token%20Home%20Screen.dart';
-import 'package:crpto_wallet/Token/send%20token.dart';
+import 'package:crpto_wallet/NFT/Home/Nft%20Home%20Screen.dart';
+import 'package:crpto_wallet/Token/Receive/receive%20token.dart';
+import 'package:crpto_wallet/Token/Send/send%20token.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/transaction%20screen.dart';
 import 'package:crpto_wallet/services/wallet_service.dart';
 import 'package:provider/provider.dart';
@@ -12,11 +11,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:crpto_wallet/state/wallet_provider.dart';
 import 'package:http/http.dart' as http;
-class NftHomeScreen extends StatefulWidget {
+class TokenHomeScreen extends StatefulWidget {
   @override
-  _NftHomeScreenState createState() => _NftHomeScreenState();
+  _TokenHomeScreenState createState() => _TokenHomeScreenState();
 }
-class _NftHomeScreenState extends State<NftHomeScreen> {
+
+class _TokenHomeScreenState extends State<TokenHomeScreen> {
   List coins = [];
   bool isLoading = true;
   int _selectedIndex = 0;
@@ -24,23 +24,7 @@ class _NftHomeScreenState extends State<NftHomeScreen> {
   bool showBalance = false;
   bool _isBalanceLoading = false; 
   bool copied = false;
-  bool isLoadingg = false;
-  void _onContinuePressed() {
-    setState(() {
-      isLoadingg = true; // ✅ Show loader
-    });
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        isLoadingg = false;
-      });
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => CreateNft(),
-        ),
-      );
-    });
-  }
+
   @override
   void initState() {
     super.initState();
@@ -124,7 +108,6 @@ Future<void> fetchBalance() async {
 
       appBar: AppBar(
         backgroundColor: Colors.black,
-        elevation: 0,
       ),
 
       body: Column(
@@ -136,7 +119,8 @@ Future<void> fetchBalance() async {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                      GestureDetector(
+ // 🔹 Balance Section
+GestureDetector(
                   onTap: fetchBalance, 
                   child: Container(
                     decoration: BoxDecoration(
@@ -169,6 +153,7 @@ Future<void> fetchBalance() async {
     setState(() {
       copied = true;
     });
+
     // ✅ 5 sec baad wapis copy icon show kar do
     Future.delayed(const Duration(seconds: 5), () {
       if (mounted) {
@@ -202,12 +187,14 @@ Future<void> fetchBalance() async {
   ),
 ),
                 SizedBox(height: 20),
+
                 // 🔹 Buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _walletButton(Icons.arrow_downward, "Send", SendTokenScreenn()),
-                    _walletButton(Icons.arrow_upward, "Receive", ReceiveScreen()),
+                    _walletButton(Icons.arrow_upward, "Send", SendTokenScreenn()),
+                    _walletButton(Icons.arrow_downward, "Receive", ReceiveScreen()),
+                    _walletButton(Icons.swap_horiz, "Swap", SwapScreen()),
                     _walletButton(Icons.add, "Buy", BuyScreen()),
                   ],
                 ),
@@ -219,34 +206,11 @@ Future<void> fetchBalance() async {
   mainAxisAlignment: MainAxisAlignment.center,
   children: [
     GestureDetector(
-      onTap: () {
-        // ✅ Token screen khol do
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => TokenHomeScreen()),
-        );
-      },
-      child: Column(
-        children: [
-          Text(
-            "Token",
-            style: TextStyle(
-              color: Colors.grey, // hamesha white rakho since new screen open ho rahi
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    ),
-    
-    SizedBox(width: 15),
-    GestureDetector(
       onTap: () => setState(() => _tabIndex = 0),
       child: Column(
         children: [
           Text(
-            "NFTs",
+            "Tokens",
             style: TextStyle(
               color: _tabIndex == 0 ? Colors.white : Colors.grey,
               fontSize: 16,
@@ -263,42 +227,138 @@ Future<void> fetchBalance() async {
         ],
       ),
     ),
+    SizedBox(width: 15),
+    GestureDetector(
+      onTap: () {
+        // ✅ NFT screen khol do
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => NftHomeScreen()),
+        );
+      },
+      child: Column(
+        children: [
+          Text(
+            "NFTs",
+            style: TextStyle(
+              color: Colors.grey, // hamesha white rakho since new screen open ho rahi
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    ),
   ],
 ),
 
           SizedBox(height: 20),
-              SizedBox(
-                width: 281,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFBFFF08), // ✅ Button color
-                    foregroundColor: Colors.black, // text color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                  ),
-                  onPressed: _onContinuePressed,
-                  child: isLoadingg
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.black,
-                          ),
-                        )
-                      : const Text(
-                          "Create NFT",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                ),
-              ),
+
           // 🔹 List Section
-          
+          Expanded(
+            child: _tabIndex == 0
+                ? isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                          color: const Color(0xFFBFFF08),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: coins.length,
+                        itemBuilder: (context, index) {
+                          final coin = coins[index];
+                          final priceChange =
+                              coin['price_change_percentage_24h'] ?? 0.0;
+
+                          return Column(
+                            children: [
+                              Card(
+                                color: Colors.black,
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 10, vertical: 6),
+                                child: ListTile(
+                                  leading: Image.network(
+                                    coin['image'],
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                  title: Text(
+                                    coin['name'],
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  subtitle: Row(
+                                    children: [
+                                      Text(
+                                        "\$${(coin['high_24h'] ?? 0.0).toStringAsFixed(2)}",
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        "${priceChange.toStringAsFixed(2)}%",
+                                        style: TextStyle(
+                                          color: priceChange >= 0
+                                              ? Colors.green
+                                              : Colors.red,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  trailing: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "\$${coin['current_price']}",
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            "\$${(coin['low_24h'] ?? 0.0).toStringAsFixed(2)}",
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 5),
+                                          Text(
+                                            coin['symbol'].toUpperCase(),
+                                            style: const TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const Divider(
+                                color: Colors.white,
+                                thickness: 0.5,
+                                indent: 30,
+                                endIndent: 30,
+                              ),
+                            ],
+                          );
+                        },
+                      )
+                    : const SizedBox(),
+          ),
         ],
       ),
       // 🔹 Bottom Navigation Bar
@@ -356,6 +416,16 @@ class SendScreen extends StatelessWidget {
         body: Center(child: Text("Send Screen")),
       );
 }
+
+
+class SwapScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: Text("Swap")),
+        body: Center(child: Text("Swap Screen")),
+      );
+}
+
 class BuyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(

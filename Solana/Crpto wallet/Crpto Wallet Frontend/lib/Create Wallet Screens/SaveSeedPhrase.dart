@@ -28,12 +28,12 @@ class _SaveSeedPhraseScreen extends State<SaveSeedPhraseScreen> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        // leading: IconButton(
+        //   icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -87,7 +87,7 @@ class _SaveSeedPhraseScreen extends State<SaveSeedPhraseScreen> {
                           ? "${index + 1}. ●●●" // 🔹 hide state
                           : "${index + 1}. ${words[index]}", // 🔹 show state
                       style:
-                          const TextStyle(color: Colors.white, fontSize: 13),
+                          const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   );
                 },
@@ -180,13 +180,12 @@ class _SaveSeedPhraseScreen extends State<SaveSeedPhraseScreen> {
                               _isLoading = false;
                             });
                            
-                            Navigator.pushAndRemoveUntil(
+                            Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const ConfirmSeedPhraseScreen(),
                               ),
-                               (route) => false,
                             );
                           }
                         });

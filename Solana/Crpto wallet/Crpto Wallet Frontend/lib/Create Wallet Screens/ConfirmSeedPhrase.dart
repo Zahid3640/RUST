@@ -1,5 +1,5 @@
 import 'dart:math';
-import 'package:crpto_wallet/Token/Token%20Home%20Screen.dart';
+import 'package:crpto_wallet/Token/Home/Token%20Home%20Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:crpto_wallet/state/wallet_provider.dart';
@@ -181,13 +181,13 @@ class _ConfirmSeedPhraseScreenState extends State<ConfirmSeedPhraseScreen> {
                               Future.delayed(const Duration(seconds: 2), () {
                                 setState(() => _isLoading = false);
                                 if (allCorrect) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text("Seed phrase confirmed ✅"),
-                                      backgroundColor:const Color(0xFFBFFF08),
-                                    ),
-                                  );
+                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                  //   const SnackBar(
+                                  //     content:
+                                  //         //Text("Seed phrase confirmed ✅"),
+                                  //     //backgroundColor:const Color(0xFFBFFF08),
+                                  //   ),
+                                  // );
                                   Navigator.pop(context);
                                            Navigator.pushAndRemoveUntil(
                                       context,

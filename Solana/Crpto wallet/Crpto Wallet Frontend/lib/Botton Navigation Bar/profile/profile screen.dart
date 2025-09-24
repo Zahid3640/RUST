@@ -1,14 +1,17 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/notification.dart';
+import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/unlockfile.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/transaction%20screen.dart';
-import 'package:crpto_wallet/Create%20Wallet%20Screens/crpto_wallet.dart';
+import 'package:crpto_wallet/Create%20Wallet%20Screens/wallet.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/Help%20and%20support.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/about%20crpto%20wallett.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/security%20and%20privacy.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/seed%20phrase.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/term%20&%20condition.dart';
-import 'package:crpto_wallet/Token/Token%20Home%20Screen.dart';
+import 'package:crpto_wallet/Token/Home/Token%20Home%20Screen.dart';
+import 'package:crpto_wallet/Unlock%20Wallett/Unlock%20Screen.dart';
+import 'package:crpto_wallet/services/wallet_storage.dart';
 import 'package:crpto_wallet/state/wallet_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -119,11 +122,10 @@ Row(
           borderRadius: BorderRadius.circular(30),
         ),
       ),
-      onPressed: () {
+      onPressed: () async{
         // 👇 Wallet clear karna
         Provider.of<WalletProvider>(context, listen: false).clear();
-
-        // 👇 Navigate to CryptoWalletScreen and remove all previous routes
+        await WalletStorage.clearWallet();
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const CryptoWalletScreen()),
@@ -146,9 +148,7 @@ Row(
     ),
   ],
 ),
-
-
-                      const SizedBox(height: 10),
+                     const SizedBox(height: 10),
                     ],
                   ),
                 ),
@@ -231,7 +231,7 @@ Row(
             // Menu Items
             buildMenuItem("Seed Phrase", () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const SeedPhraseScreen()));
+                  MaterialPageRoute(builder: (_) => const UnlockWalletScreenn()));
             }),
             buildMenuItem("Terms and Conditions", () {
               Navigator.push(

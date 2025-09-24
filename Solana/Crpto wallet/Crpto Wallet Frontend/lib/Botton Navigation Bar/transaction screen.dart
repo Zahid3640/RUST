@@ -324,7 +324,7 @@
 // }
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/notification.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/profile%20screen.dart';
-import 'package:crpto_wallet/Token/Token%20Home%20Screen.dart';
+import 'package:crpto_wallet/Token/Home/Token%20Home%20Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -354,6 +354,11 @@ class TransactionsScreen extends StatelessWidget {
         title: const Text("Transactions",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         centerTitle: true,
+        elevation: 0,
+         leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
+        ),
       ),
       body: transactions.isEmpty
           ? const Center(
@@ -426,7 +431,7 @@ class TransactionsScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start, 
         children: [
           /// First Row: Title & Short Address
           Row(
@@ -470,4 +475,4 @@ class TransactionsScreen extends StatelessWidget {
       ),
     );
   }
-}
+} 

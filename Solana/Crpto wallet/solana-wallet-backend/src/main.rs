@@ -44,6 +44,13 @@ mod receive;
 mod wallet;
 mod balance;
 mod history;
+mod send_nfts;
+use actix_cors::Cors;
+use env_logger::Env;
+use dotenvy;
+mod routes; 
+mod multichain_wallet;
+
 
 #[derive(serde::Deserialize)]
 struct ExportRequest {
@@ -90,6 +97,11 @@ async fn export_wallet_handler(payload: web::Json<ExportRequest>) -> impl Respon
 }
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+        dotenvy::dotenv().ok();                      // ← loads .env from CWD
+    env_logger::init();
+
+    // sanity: DO NOT print the token; just “yes/no”
+    log::info!("PINATA_JWT present: {}", if std::env::var("PINATA_JWT").is_ok() { "yes" } else { "no" });
     let port = 8082;
 
     println!("🚀 Server at http://0.0.0.0:{port}");
@@ -100,18 +112,58 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
+         .wrap(
+                Cors::default()
+                    .allow_any_origin()
+                    .allow_any_header()
+                    .allow_any_method()
+            )
+            // increase multipart/body size (25 MB)
+            .app_data(web::PayloadConfig::new(25 * 1024 * 1024))
+            .service(routes::create_nft) 
             .app_data(app_state.clone())
             .service(wallet::create_wallet)
+            //.service(multichain_wallet::create_wallet_multichain)
+            //.service(multichain_wallet::unlock_wallet)
+            .service(routes::get_nfts)
+            .service(send_nfts::send_nft)
             .service(wallet::import_wallet)
             .service(wallet::unlock_wallet)
             .service(balance::sol_balance)
             .service(receive::receive_wallet)
             .service(history::sol_history)
             .service(send_sol::sol_send)
-            .route("/export-wallet", web::post().to(export_wallet_handler))
+            .service(wallet::export_wallet)
             .route("/add-account", web::post().to(add_account))
     })
     .bind(("0.0.0.0", port))?      // <- important
     .run()
     .await
 }
+// use actix_cors::Cors;
+// use actix_web::{web, App, HttpServer};
+// use env_logger::Env;
+
+// mod routes; // your create_nft route lives here
+
+// #[actix_web::main]
+// async fn main() -> std::io::Result<()> {
+//     env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
+
+//     HttpServer::new(|| {
+//         App::new()
+//             // allow your phone ↔ local server
+//             .wrap(
+//                 Cors::default()
+//                     .allow_any_origin()
+//                     .allow_any_header()
+//                     .allow_any_method()
+//             )
+//             // increase multipart/body size (25 MB)
+//             .app_data(web::PayloadConfig::new(25 * 1024 * 1024))
+//             .service(routes::create_nft) // #[post("/create_nft")]
+//     })
+//     .bind(("0.0.0.0", 8082))?
+//     .run()
+//     .await
+// }

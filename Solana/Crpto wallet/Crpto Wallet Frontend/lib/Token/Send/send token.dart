@@ -1,6 +1,6 @@
 import 'package:crpto_wallet/services/wallet_service.dart';
 import 'package:crpto_wallet/state/wallet_provider.dart';
-import 'package:crpto_wallet/Token/tokensentsuccessfully.dart';
+import 'package:crpto_wallet/Token/Send/tokensentsuccessfully.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
@@ -20,8 +20,7 @@ class _SendTokenScreennState extends State<SendTokenScreenn> {
   double availableBalance = 0.0;
   double selectedAmount = 0.0; // always in SOL
   double solPriceUsd = 0.0;
-  double networkFeeMin = 0.91;
-  double networkFeeMax = 1.50;
+
 
   bool isLoading = true;
   bool showUsd = false; // false = SOL mode, true = USD mode
@@ -62,61 +61,62 @@ class _SendTokenScreennState extends State<SendTokenScreenn> {
       setState(() => isLoading = false);
     }
   }
-
-  Future<void> _sendSol() async {
-    if (_addressController.text.isEmpty || selectedAmount <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Enter valid address and amount")),
-      );
-      return;
-    }
-
-    try {
-      setState(() => isSending = true);
-
-      final walletProvider =
-          Provider.of<WalletProvider>(context, listen: false);
-
-      final res = await WalletService.sendSol(
-        privateKey: walletProvider.privateKey!,
-        toAddress: _addressController.text,
-        amount: selectedAmount,
-      );
-
-      setState(() => isSending = false);
-      final String signature = res["signature"] ?? "N/A";
-
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Tokensendsuccessfully(
-            amount: selectedAmount,
-            usdValue: (selectedAmount * solPriceUsd),
-            toAddress: _addressController.text,
-            signature: signature,
-            networkFeeMin: networkFeeMin,
-            networkFeeMax: networkFeeMax,
-          ),
-        ),
-      );
-    } catch (e) {
-      setState(() => isSending = false);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error: $e")),
-      );
-    }
-    final walletProvider = Provider.of<WalletProvider>(context, listen: false);
-walletProvider.addTransaction(
-  TransactionModel(
-    type: "SENT",
-    subtitle: "To: ${_addressController.text}",
-    amount: selectedAmount.toStringAsFixed(4),
-    token: "SOL",
-    date: DateTime.now().toString(), // format properly if needed
-  ),
-);
+Future<void> _sendSol() async {
+  if (_addressController.text.isEmpty || selectedAmount <= 0) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Enter valid address and amount")),
+    );
+    return;
   }
 
+  try {
+    setState(() => isSending = true);
+
+    final walletProvider = Provider.of<WalletProvider>(context, listen: false);
+
+    final res = await WalletService.sendSol(
+      privateKey: walletProvider.privateKey!,
+      toAddress: _addressController.text,
+      amount: selectedAmount,
+    );
+
+    setState(() => isSending = false);
+
+    final String signature = res["signature"] ?? "N/A";
+    final double feeSol = res["fee_sol"] ?? 0.0; // ✅ ab safe h
+    final String network = res["network"] ?? "devnet";
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Tokensendsuccessfully(
+          amount: selectedAmount,
+          usdValue: (selectedAmount * solPriceUsd),
+          toAddress: _addressController.text,
+          signature: signature,
+          feeSol: feeSol,
+          network: network,
+        ),
+      ),
+    );
+
+    // ✅ Save Transaction
+    walletProvider.addTransaction(
+      TransactionModel(
+        type: "SENT",
+        subtitle: "To: ${_addressController.text}",
+        amount: selectedAmount.toStringAsFixed(4),
+        token: "SOL",
+        date: DateTime.now().toIso8601String(),
+      ),
+    );
+  } catch (e) {
+    setState(() => isSending = false);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text("Error: $e")),
+    );
+  }
+}
   /// ✅ Update selectedAmount according to mode
   void _updateAmountFromInput(String value) {
     final entered = double.tryParse(value) ?? 0.0;
@@ -156,7 +156,9 @@ walletProvider.addTransaction(
   Widget build(BuildContext context) {
     final usdValue = (selectedAmount * solPriceUsd).toStringAsFixed(2);
 
-    return Scaffold(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -302,15 +304,7 @@ walletProvider.addTransaction(
                     ],
                   ),
 
-                  const SizedBox(height: 40),
 
-                  Text("Network fee",
-                      style: const TextStyle(color: Colors.grey, fontSize: 14)),
-                  const SizedBox(height: 4),
-                  Text(
-                    "US\$${networkFeeMin.toStringAsFixed(2)} - US\$${networkFeeMax.toStringAsFixed(2)}",
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
-                  ),
                   const SizedBox(height: 90),
 
                   // ✅ Send Button
@@ -349,6 +343,6 @@ walletProvider.addTransaction(
                 ],
               ),
             ),
-    );
+    ));
   }
 }

@@ -204,7 +204,7 @@
 //     );
 //   }
 // }
-import 'package:crpto_wallet/Token/Token%20Home%20Screen.dart';
+import 'package:crpto_wallet/Token/Home/Token%20Home%20Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -213,8 +213,9 @@ class Tokensendsuccessfully extends StatefulWidget {
   final double usdValue;
   final String toAddress;
   final String signature;
-  final double networkFeeMin;
-  final double networkFeeMax;
+   final double feeSol;        // ✅ add
+  final String network;
+  
 
   const Tokensendsuccessfully({
     super.key,
@@ -222,8 +223,9 @@ class Tokensendsuccessfully extends StatefulWidget {
     required this.usdValue,
     required this.toAddress,
     required this.signature,
-    required this.networkFeeMin,
-    required this.networkFeeMax,
+    required this.feeSol,        // ✅ add
+    required this.network,
+    
   });
 
   @override
@@ -370,7 +372,15 @@ class _TokensendsuccessfullyState extends State<Tokensendsuccessfully> {
                 const Text("Network fee",
                     style: TextStyle(color: Colors.grey, fontSize: 14)),
                 Text(
-                  "US\$${widget.networkFeeMin.toStringAsFixed(2)} - US\$${widget.networkFeeMax.toStringAsFixed(2)}",
+                  "${widget.feeSol.toStringAsFixed(6)} SOL",
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                const SizedBox(height: 10),
+
+                const Text("Network",
+                    style: TextStyle(color: Colors.grey, fontSize: 14)),
+                Text(
+                  "${widget.network}",
                   style: const TextStyle(color: Colors.white, fontSize: 16),
                 ),
 

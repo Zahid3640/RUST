@@ -75,3 +75,8 @@ async fn get_tokens(req: web::Json<GetTokensRequest>) -> impl Responder {
         }))
     }
 }
+// bip32 = "0.3"
+// k256 = { version = "0.12", features = ["ecdsa"] }
+// sha3 = "0.10"          # keccak256 for ethereum address
+// hex = "0.4"
+// # for Bitcoin address and WIF handling

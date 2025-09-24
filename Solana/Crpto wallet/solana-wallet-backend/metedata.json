@@ -1,0 +1,11 @@
+{
+  "name": "Zahid NFT",
+  "symbol": "ZHD",
+  "description": "This is Zahid's first NFT on Solana Devnet.",
+  "image": "https://github.com/Zahid3640/RUST/blob/main/Solana/Crpto%20wallet/solana-wallet-backend/zahidnft.png",
+  "external_url": "https://github.com/Zahid3640",
+  "attributes": [
+    { "trait_type": "Background", "value": "Blue" },
+    { "trait_type": "Special", "value": "Unique" }
+  ]
+}

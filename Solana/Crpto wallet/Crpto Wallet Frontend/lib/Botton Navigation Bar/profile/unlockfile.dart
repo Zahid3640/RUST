@@ -1,17 +1,19 @@
 import 'dart:developer';
+import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/profile%20screen.dart';
+import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/seed%20phrase.dart';
 import 'package:crpto_wallet/Token/Home/Token%20Home%20Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:crpto_wallet/state/wallet_provider.dart';
 import 'package:crpto_wallet/services/wallet_service.dart';
 
-class UnlockWalletScreen extends StatefulWidget {
-  const UnlockWalletScreen({super.key});
+class UnlockWalletScreenn extends StatefulWidget {
+  const UnlockWalletScreenn({super.key});
   @override
-  State<UnlockWalletScreen> createState() => _UnlockWalletScreenState();
+  State<UnlockWalletScreenn> createState() => _UnlockWalletScreennState();
 }
 
-class _UnlockWalletScreenState extends State<UnlockWalletScreen> {
+class _UnlockWalletScreennState extends State<UnlockWalletScreenn> {
   bool _isPasswordVisible = false;
   bool _isLoading = false;
   bool _isChecked = false;
@@ -59,7 +61,7 @@ class _UnlockWalletScreenState extends State<UnlockWalletScreen> {
     );
   }
 
-  Future<void> _handleContinue() async {
+ Future<void> _handleContinue() async {
   if (_passwordController.text.isEmpty || !_isChecked) {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -73,27 +75,18 @@ class _UnlockWalletScreenState extends State<UnlockWalletScreen> {
   setState(() => _isLoading = true);
 
   try {
-    final data = await WalletService.unlockWallet(
+    final res = await WalletService.exportWallet(
       password: _passwordController.text.trim(),
     );
 
-    if (mounted) {
-      context.read<WalletProvider>().setWalletData(data);
+    // ✅ ab direct provider me bhejo (payload already hai)
+    context.read<WalletProvider>().setWalletData(res);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Wallet unlocked successfully!"),
-          backgroundColor: Color.fromARGB(255, 8, 9, 6),
-        ),
-      );
-
-      // ✅ Navigate to CryptoWalletApp screen
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => TokenHomeScreen()),
-        (route) => false,
-      );
-    }
+    if (!mounted) return;
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (_) => const SeedPhraseScreen()),
+    );
   } catch (e) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -101,10 +94,7 @@ class _UnlockWalletScreenState extends State<UnlockWalletScreen> {
           content: Text("Error: $e"),
           backgroundColor: Colors.red,
         ),
-        // ignore: avoid_print
-        
       );
-      print("$e");
     }
   } finally {
     if (mounted) setState(() => _isLoading = false);
@@ -114,9 +104,7 @@ class _UnlockWalletScreenState extends State<UnlockWalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Scaffold(
+    return Scaffold(
       backgroundColor: Colors.black,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -133,14 +121,14 @@ class _UnlockWalletScreenState extends State<UnlockWalletScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-            const Text("Unlock Wallet",
+            const Text("Export your Secret data?",
                 style: TextStyle(
                     color: Colors.white,
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             const Text(
-              "To unlock your wallet, enter your \nCorrect password.",
+              "If you want to export your secret data,\n enter your Correct password.",
               style: TextStyle(color: Colors.white, fontSize: 16),
               textAlign: TextAlign.center,
             ),
@@ -213,7 +201,7 @@ class _UnlockWalletScreenState extends State<UnlockWalletScreen> {
                               style: TextStyle(fontWeight: FontWeight.bold)),
                         ],
                       )
-                    : const Text("Continue",
+                    : const Text("Export Wallet",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold)),
               ),
@@ -222,6 +210,6 @@ class _UnlockWalletScreenState extends State<UnlockWalletScreen> {
           ],
         ),
       ),
-    ));
+    );
   }
 }

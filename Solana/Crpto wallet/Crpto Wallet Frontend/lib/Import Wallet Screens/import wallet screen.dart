@@ -1,6 +1,6 @@
-import 'package:crpto_wallet/Create%20Wallet%20Screens/createpassword.dart';
-import 'package:crpto_wallet/Import%20Wallet%20Screens/import%20from%20private%20key.dart';
-import 'package:crpto_wallet/Import%20Wallet%20Screens/import%20from%20seed%20phrase.dart';
+ import 'package:crpto_wallet/Create%20Wallet%20Screens/create%20wallet.dart';
+import 'package:crpto_wallet/Import%20Wallet%20Screens/Private%20Key/import%20from%20private%20key.dart';
+import 'package:crpto_wallet/Import%20Wallet%20Screens/Seed%20Phrase/import%20from%20seed%20phrase.dart';
 import 'package:crpto_wallet/Unlock%20Wallett/Unlock%20Screen.dart';
 import 'package:flutter/material.dart';
 
@@ -26,10 +26,9 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       setState(() => isImportLoading = false);
 
-      Navigator.pushAndRemoveUntil(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const ImportSeedPhraseScreen()),
-        (route) => false,
       );
     });
   }
@@ -42,10 +41,9 @@ class _ImportWalletScreenState extends State<ImportWalletScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       setState(() => isUnlockLoading = false);
 
-      Navigator.pushAndRemoveUntil(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const ImportPrivateKeyScreen()),
-        (route) => false,
       );
     });
   }

@@ -1,11 +1,12 @@
-import 'dart:developer';
+import 'dart:async';
 import 'dart:ui';
+import 'package:crpto_wallet/services/wallet_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:crpto_wallet/Create Wallet Screens/SaveSeedPhrase.dart';
 import 'package:crpto_wallet/state/wallet_provider.dart';
 import 'package:crpto_wallet/services/wallet_service.dart';
-import 'package:flutter/gestures.dart';
+
 
 class CreatePasswordScreen extends StatefulWidget {
   const CreatePasswordScreen({super.key});
@@ -20,7 +21,9 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
   bool _isChecked = false;
   bool _isLoading = false; // ✅ loader state for main screen
   bool _firstBottomLoading = false;
-  bool _secondBottomLoading = false; // ✅ loader state for bottom sheets
+  bool _secondBottomLoading = false;
+  bool _showPasswordStrength = false; // ✅ Strength message flag
+  Timer? _hideTimer; // ✅ loader state for bottom sheets
 
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -35,9 +38,36 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
     _confirmPasswordController.dispose();
     _passwordFocus.dispose();
     _confirmPasswordFocus.dispose();
+     _hideTimer?.cancel();
     super.dispose();
   }
+  bool _isPasswordStrong(String password) {
+  final regex =
+      RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$');
+  return regex.hasMatch(password);
+}
 
+bool get _canCheckTerms {
+  return _isPasswordStrong(_passwordController.text) &&
+      _passwordController.text == _confirmPasswordController.text;
+}
+  void _handlePasswordChanged(String value) {
+    setState(() {
+      if (_isPasswordStrong(value)) {
+        _showPasswordStrength = true;
+
+        _hideTimer?.cancel();
+        _hideTimer = Timer(const Duration(seconds: 5), () {
+          if (mounted) {
+            setState(() => _showPasswordStrength = false);
+          }
+        });
+      } else {
+        _showPasswordStrength = true; 
+        _hideTimer?.cancel(); 
+      }
+    });
+  }
   InputDecoration _buildInputDecoration(
     String hint,
     bool isVisible,
@@ -70,6 +100,54 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
       ),
     );
   }
+// Future<void> _handleContinue() async {
+//   if (_isLoading) return;
+
+//   if (!_isChecked) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(
+//         content: Text("Please accept terms first"),
+//         backgroundColor: Colors.red,
+//       ),
+//     );
+//     return;
+//   }
+
+//   FocusScope.of(context).unfocus();
+//   setState(() => _isLoading = true);
+
+//   try {
+//     final data = await WalletService.createWallet(
+//       password: _passwordController.text.trim(),
+//       confirmPassword: _confirmPasswordController.text.trim(),
+//     );
+
+//    if ((data['status']?.toString().toLowerCase() ?? '') == 'success') {
+//   context.read<WalletProvider>().setWalletDataa(data);
+ 
+//   if (!mounted) return;
+//   _showFirstBottomSheet(context); // ✅ show seed phrase
+// } else {
+//   final msg = data['message']?.toString() ?? 'Something went wrong';
+//   if (mounted) {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       SnackBar(content: Text(msg), backgroundColor: Colors.red),
+//     );
+//   }
+// }
+
+//   } catch (e) {
+//     if (mounted) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+//       );
+//     }
+//     debugPrint("❌ Error in wallet creation: $e");
+//   } finally {
+//     if (mounted) setState(() => _isLoading = false);
+//   }
+// }
+
 
   Future<void> _handleContinue() async {
     if (_isLoading) return;
@@ -82,23 +160,6 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
       );
       return;
     }
-    if (_passwordController.text.length < 8) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text("Password must be at least 8 characters"),
-            backgroundColor: Colors.red),
-      );
-      return;
-    }
-    if (_passwordController.text != _confirmPasswordController.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text("Passwords do not match"),
-            backgroundColor: Colors.red),
-      );
-      return;
-    }
-
     FocusScope.of(context).unfocus();
     setState(() => _isLoading = true);
 
@@ -123,159 +184,198 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
       );
+      print(e.toString());
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
   }
+  String? get _confirmPasswordError {
+  if (_confirmPasswordController.text.isEmpty) return null;
+  if (_passwordController.text != _confirmPasswordController.text) {
+    return "❌ Passwords do not match";
+  }
+  return null;
+}
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+       child:Scaffold(
+    backgroundColor: Colors.black,
+    appBar: AppBar(
       backgroundColor: Colors.black,
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
+      elevation: 0,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+        onPressed: _isLoading ? null : () => Navigator.pop(context),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(height: 20),
-            const Text("Create Password",
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            const Text(
-              "This password will unlock your wallet\non this device only.",
-              style: TextStyle(color: Colors.white, fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 30),
+    ),
+    body: SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 20),
+          const Text("Create Password",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          const Text(
+            "This password will unlock your wallet\non this device only.",
+            style: TextStyle(color: Colors.white, fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 30),
 
-            // New Password
-            TextField(
-              controller: _passwordController,
-              focusNode: _passwordFocus,
-              obscureText: !_isPasswordVisible,
-              maxLength: 10,
-              buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
-              decoration: _buildInputDecoration(
-                  "New Password",
-                  _isPasswordVisible,
-                  () => setState(() => _isPasswordVisible = !_isPasswordVisible),
-                  _passwordFocus.hasFocus,
-                  _passwordController.text),
-              style: const TextStyle(color: Colors.white),
-              onChanged: (_) => setState(() {}),
-            ),
-            const SizedBox(height: 16),
+          // Password
+          TextField(
+            controller: _passwordController,
+            focusNode: _passwordFocus,
+            obscureText: !_isPasswordVisible,
+            enabled: !_isLoading,
+            maxLength: 16,
+            buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
+            decoration: _buildInputDecoration(
+                "New Password",
+                _isPasswordVisible,
+                () => setState(() => _isPasswordVisible = !_isPasswordVisible),
+                _passwordFocus.hasFocus,
+                _passwordController.text),
+            style: const TextStyle(color: Colors.white),
+            onChanged: _handlePasswordChanged,
+          ),
+          const SizedBox(height: 16),
 
-            // Confirm Password
-            TextField(
-              controller: _confirmPasswordController,
-              focusNode: _confirmPasswordFocus,
-              obscureText: !_isConfirmPasswordVisible,
-              maxLength: 10,
-              buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
-              decoration: _buildInputDecoration(
-                  "Confirm Password",
-                  _isConfirmPasswordVisible,
-                  () => setState(() =>
-                      _isConfirmPasswordVisible = !_isConfirmPasswordVisible),
-                  _confirmPasswordFocus.hasFocus,
-                  _confirmPasswordController.text),
-              style: const TextStyle(color: Colors.white),
-              onChanged: (_) => setState(() {}),
-            ),
+          // Confirm Password
+                           TextField(
+                    controller: _confirmPasswordController,
+                    focusNode: _confirmPasswordFocus,
+                    obscureText: !_isConfirmPasswordVisible,
+                    enabled: !_isLoading,
+                    maxLength: 16,
+                    buildCounter: (_, {required currentLength, required isFocused, maxLength}) => null,
+                    decoration: _buildInputDecoration(
+                        "Confirm Password",
+                        _isConfirmPasswordVisible,
+                        () => setState(
+                            () => _isConfirmPasswordVisible = !_isConfirmPasswordVisible),
+                        _confirmPasswordFocus.hasFocus,
+                        _confirmPasswordController.text),
+                    style: const TextStyle(color: Colors.white),
+                    onChanged: (_) => setState(() {}),
+                  ),
 
-            const SizedBox(height: 20),
+                  // ✅ error show niche confirm password k
+                  if (_confirmPasswordError != null)
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        _confirmPasswordError!,
+                        style: const TextStyle(color: Colors.red, fontSize: 12),
+                      ),
+                    ),
 
-            // Face ID toggle
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("Log in with Face ID",
-                    style: TextStyle(color: Colors.white, fontSize: 14)),
-                Switch(
-                  value: _useFaceId,
-                  activeColor: const Color(0xFFBFFF08),
-                  onChanged: (val) => setState(() => _useFaceId = val),
-                ),
-              ],
-            ),
+                  const SizedBox(height: 10),
 
-            const SizedBox(height: 10),
+             // ✅ Password strength indicator (conditionally shown)
+if (_showPasswordStrength)
+  Align(
+    alignment: Alignment.centerLeft,
+    child: Text(
+      _isPasswordStrong(_passwordController.text)
+          ? "Now Your Password is Strong"
+          : "⚠ Must be 8+ chars, include upper, lower, number & special char",
+      style: TextStyle(
+        color: _isPasswordStrong(_passwordController.text)
+            ? const Color(0xFFBFFF08)
+            : Colors.red,
+        fontSize: 12,
+      ),
+    ),
+  ),
+          const SizedBox(height: 20),
 
-            // Checkbox
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Checkbox(
+          // Face ID toggle
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("Log in with Face ID",
+                  style: TextStyle(color: Colors.white, fontSize: 14)),
+              Switch(
+                value: _useFaceId,
+                activeColor: const Color(0xFFBFFF08),
+                onChanged: (val) => setState(() => _useFaceId = val),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          // ✅ Checkbox (enabled only if strong password + match)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              IgnorePointer(
+                ignoring: !_canCheckTerms,
+                child: Checkbox(
                   value: _isChecked,
                   activeColor: const Color(0xFFBFFF08),
-                  onChanged: (val) => setState(() => _isChecked = val ?? false),
+                  onChanged: (val) =>
+                      setState(() => _isChecked = val ?? false),
                 ),
-                const Expanded(
-                  child: Text(
-                    "I understand that 'Crypto Wallet' cannot recover this password for me.",
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+              Expanded(
+                child: Text(
+                  "I understand that 'Crypto Wallet' cannot recover this password for me.",
+                  style: TextStyle(
+                    color: Colors.grey ,
+                    fontSize: 12,
                   ),
                 ),
-              ],
-            ),
-
-            const SizedBox(height: 130),
-
-            // Continue Button with loader
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: _isChecked
-                      ? const Color(0xFFBFFF08)
-                      : const Color.fromARGB(255, 137, 158, 46),
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                ),
-                onPressed: _handleContinue,
-                child: _isLoading
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.black),
-                          ),
-                          SizedBox(width: 12),
-                          Text("Processing...",
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      )
-                    : const Text("Continue",
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold)),
               ),
-            ),
+            ],
+          ),
 
-            const SizedBox(height: 12),
-            const Text("Step 1/2",
-                style: TextStyle(color: Colors.white, fontSize: 14)),
-            const SizedBox(height: 20),
-          ],
-        ),
+          const SizedBox(height: 100),
+
+          // Continue button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _isChecked
+                    ? const Color(0xFFBFFF08)
+                    : const Color.fromARGB(255, 137, 158, 46),
+                foregroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30)),
+                padding: const EdgeInsets.symmetric(vertical: 15),
+              ),
+              onPressed: _handleContinue,
+              child: _isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2, color: Colors.black),
+                    )
+                  : const Text("Continue",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            ),
+          ),
+
+          const SizedBox(height: 12),
+          const Text("Step 1/2",
+              style: TextStyle(color: Colors.white, fontSize: 14)),
+          const SizedBox(height: 20),
+        ],
       ),
+    ),
+  )
     );
   }
 
@@ -493,6 +593,3 @@ Widget _blurBackground({required Widget child}) {
     );
   }
 }
-
-
-

@@ -1,6 +1,6 @@
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/profile%20screen.dart';
 import 'package:crpto_wallet/Botton%20Navigation%20Bar/transaction%20screen.dart';
-import 'package:crpto_wallet/Token/Token%20Home%20Screen.dart';
+import 'package:crpto_wallet/Token/Home/Token%20Home%20Screen.dart';
 import 'package:flutter/material.dart';
 
 class NotificationsScreen extends StatelessWidget {

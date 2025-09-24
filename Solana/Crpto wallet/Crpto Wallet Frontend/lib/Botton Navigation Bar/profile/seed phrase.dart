@@ -1,3 +1,4 @@
+import 'package:crpto_wallet/Botton%20Navigation%20Bar/profile/unlockfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:crpto_wallet/Create%20Wallet%20Screens/ConfirmSeedPhrase.dart';
@@ -13,18 +14,15 @@ class SeedPhraseScreen extends StatefulWidget {
 
 class _SeedPhraseScreen extends State<SeedPhraseScreen> {
   bool _copied = false;
-  bool _hidden = false; // 🔹 toggle ke liye
+  bool _hidden = true; // 🔹 toggle ke liye
   bool _isLoading = false;
   
   @override
   Widget build(BuildContext context) {
-    final wallet = context.watch<WalletProvider>();
-    final phrase = wallet.seedPhrase ?? "";
+  final wallet = context.watch<WalletProvider>();
+final phrase = wallet.seedPhrase ?? "";
+final privateKey = wallet.privateKey ?? "";
     final words = phrase.isEmpty ? <String>[] : phrase.split(" ");
-   // final walletProvider = Provider.of<WalletProvider>(context);
-  final privateKey = wallet.privateKey ?? "";
-
-  // ✅ Agar empty hai (api ne load nahi kiya)
   if (privateKey.isEmpty) {
     return Scaffold(
       backgroundColor: Colors.black,
@@ -36,7 +34,6 @@ class _SeedPhraseScreen extends State<SeedPhraseScreen> {
       ),
     );
   }
-
     return Scaffold(
       backgroundColor: Colors.black,
       resizeToAvoidBottomInset: true,
@@ -46,22 +43,21 @@ class _SeedPhraseScreen extends State<SeedPhraseScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context,);
           },
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 24), 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
-
             const Text(
-              "Save Your Seed Phrase",
+              "Your Seed Phrase & Private Key",
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 22,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -69,15 +65,12 @@ class _SeedPhraseScreen extends State<SeedPhraseScreen> {
             const SizedBox(height: 8),
 
             const Text(
-              "This is your seed phrase. Save it in a\nsafe location. You’ll be asked to re-\nenter this phrase (in asked order) on\nthe next step.",
+              "This is your seed phrase and private key. Save it in a safe location.You’ll be asked to re-enter this phrase (in asked order) on\nthe next step.",
               style: TextStyle(color: Colors.white, fontSize: 16),
               textAlign: TextAlign.center,
             ),
 
             const SizedBox(height: 30),
-
-            // 🔹 Seed Phrase Box
-           // 🔹 Seed Phrase Box
 Container(
   padding: const EdgeInsets.all(10),
   decoration: BoxDecoration(
@@ -117,7 +110,7 @@ Container(
 
             // 🔹 Copy to Clipboard + Hide/Show
             Column(
-              children: [
+              children: [ 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -143,33 +136,64 @@ Container(
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 6),
-
-                // 🔹 Hide / Show Toggle
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _hidden = !_hidden;
-                    });
-                  },
-                child: Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-    Icon(
-      _hidden ? Icons.visibility_off : Icons.visibility,
-      color: _hidden ? Colors.grey : Colors.white, // ✅ fixed here
-    ),
-    const SizedBox(width: 6),
-    Text(
-      _hidden ? "Show Phrase" : "Hide Phrase",
-      style: const TextStyle(color: Colors.white, fontSize: 14),
-    ),
-  ],
-),
-                ),
               ],
             ),
+            const SizedBox(height: 10),
+Container(
+  margin: const EdgeInsets.symmetric(vertical: 10),
+  padding: const EdgeInsets.all(12),
+  decoration: BoxDecoration(
+    border: Border.all(color: const Color(0xFFBFFF08), width: 2),
+    borderRadius: BorderRadius.circular(16),
+    color: Colors.black,
+  ),
+  child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        "Private Key",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      const SizedBox(height: 10),
+
+      // 🔹 Private Key + Show/Hide
+      Row(
+        children: [
+          Expanded(
+            child: Text(
+              _hidden
+                  ? "●●●●●●●●●●●●●●●●●●●" // hide mode
+                  : privateKey, // show mode
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.copy, color: Color(0xFFBFFF08)),
+            onPressed: () {
+              Clipboard.setData(ClipboardData(text: privateKey));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("Private Key copied ✅"),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    ],
+  ),
+),
+
             const SizedBox(height: 20),
           ],
         ),
@@ -177,35 +201,4 @@ Container(
     );
   }
 }
-//const SizedBox(height: 10),
 
-                // 🔹 Wallet Address (Copyable)
-                // InkWell(
-                //   onTap: () {
-                //     Clipboard.setData(ClipboardData(text: privateKey));
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(
-                //         content: Text("Address copied to clipboard ✅"),
-                //         backgroundColor: Colors.green,
-                //       ),
-                //     );
-                //   },
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: [
-                //       const Icon(Icons.account_balance_wallet,
-                //           color: Colors.grey, size: 18),
-                //       const SizedBox(width: 6),
-                //       Text(
-                //         privateKey,
-                //         style: const TextStyle(
-                //             color: Colors.grey,
-                //             fontSize: 14,
-                //             fontWeight: FontWeight.w200),
-                //       ),
-                //       const SizedBox(width: 4),
-                //       const Icon(Icons.copy,
-                //           size: 16, color: Colors.grey),
-                //     ],
-                //   ),
-                // ),
